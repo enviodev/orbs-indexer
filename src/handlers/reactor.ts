@@ -27,7 +27,7 @@ Reactor.Fill.handler(async ({ event, context }) => {
   const executorAddress = event.params.filler.toLowerCase();
   const config = CHAIN_CONFIG[chainId];
 
-  const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.transaction.hash}`);
+  const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
   const transfers = parseTransferLogs(transfersJson);
 
   let srcAmount: string | undefined;

@@ -51,7 +51,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
   let dexFee: string | undefined;
   const config = CHAIN_CONFIG[chainId];
   if (config) {
-    const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.transaction.hash}`);
+    const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
     const transfers = parseTransferLogs(transfersJson);
     for (const transfer of transfers) {
       if (transfer.to === config.feesAddress.toLowerCase()) {

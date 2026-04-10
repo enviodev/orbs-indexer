@@ -1,33 +1,30 @@
 import { createEffect, S } from "envio";
-import { createPublicClient, http, keccak256, toBytes } from "viem";
-import { polygon, mainnet } from "viem/chains";
+import { HypersyncClient, JoinMode } from "@envio-dev/hypersync-client";
 
-function getViemChain(chainId: number) {
-  if (chainId === 137) return polygon;
-  if (chainId === 1) return mainnet;
-  return mainnet;
-}
+const TRANSFER_TOPIC = "0xddf252ad1be2c89b69c2b068fc378daa952ba7f163c4a11628f55a4df523b3ef";
 
-const clientCache = new Map<number, ReturnType<typeof createPublicClient>>();
-function getClient(chainId: number) {
+const clientCache = new Map<number, HypersyncClient>();
+function getHypersyncClient(chainId: number): HypersyncClient {
   if (!clientCache.has(chainId)) {
-    const rpcUrl = process.env[`ENVIO_RPC_URL_${chainId}`] || "";
-    if (!rpcUrl) return null;
-    clientCache.set(chainId, createPublicClient({ chain: getViemChain(chainId), transport: http(rpcUrl) }));
+    clientCache.set(
+      chainId,
+      new HypersyncClient({
+        url: `https://${chainId}.hypersync.xyz`,
+        apiToken: process.env.ENVIO_API_TOKEN || "",
+      })
+    );
   }
   return clientCache.get(chainId)!;
 }
 
-const TRANSFER_TOPIC = keccak256(toBytes("Transfer(address,address,uint256)"));
-
 export interface TransferLog {
   from: string;
   to: string;
-  amount: string; // Use string to avoid bigint serialization
+  amount: string;
   tokenAddress: string;
 }
 
-// Input: "chainId:txHash"
+// Input: "chainId:blockNumber:txHash"
 export const getTransferLogs = createEffect(
   {
     name: "getTransferLogs",
@@ -37,25 +34,57 @@ export const getTransferLogs = createEffect(
     rateLimit: false,
   },
   async ({ input }) => {
-    const [chainIdStr, txHash] = input.split(":");
-    const chainId = Number(chainIdStr);
-    const client = getClient(chainId);
-    if (!client) return "[]";
+    const parts = input.split(":");
+    const chainId = Number(parts[0]);
+    const blockNumber = Number(parts[1]);
+    const txHash = parts[2] || "";
+
+    const client = getHypersyncClient(chainId);
     try {
-      const receipt = await client.getTransactionReceipt({
-        hash: txHash as `0x${string}`,
+      const res = await client.get({
+        fromBlock: blockNumber,
+        toBlock: blockNumber + 1,
+        logs: [
+          {
+            topics: [[TRANSFER_TOPIC]],
+          },
+        ],
+        transactions: [
+          {
+            hash: [txHash],
+          },
+        ],
+        fieldSelection: {
+          log: [
+            "Address",
+            "Data",
+            "Topic0",
+            "Topic1",
+            "Topic2",
+            "Topic3",
+            "TransactionHash",
+          ],
+        },
+        joinMode: JoinMode.JoinAll,
       });
+
       const transfers: TransferLog[] = [];
-      for (const log of receipt.logs) {
-        if (log.topics[0] === TRANSFER_TOPIC && log.topics.length >= 3) {
-          const from = "0x" + (log.topics[1] as string).slice(26);
-          const to = "0x" + (log.topics[2] as string).slice(26);
+      for (const log of res.data.logs) {
+        if (
+          log.topics[0] === TRANSFER_TOPIC &&
+          log.transactionHash?.toLowerCase() === txHash.toLowerCase() &&
+          log.topics.length >= 3 &&
+          log.topics[1] &&
+          log.topics[2]
+        ) {
+          const from = "0x" + log.topics[1]!.slice(26);
+          const to = "0x" + log.topics[2]!.slice(26);
           const amount = log.data ? BigInt(log.data).toString() : "0";
           transfers.push({
             from: from.toLowerCase(),
             to: to.toLowerCase(),
             amount,
-            tokenAddress: log.address.toLowerCase(),
+            tokenAddress: (log.address || "").toLowerCase(),
           });
         }
       }
@@ -66,7 +95,6 @@ export const getTransferLogs = createEffect(
   }
 );
 
-// Helper to parse the result
 export function parseTransferLogs(result: string): TransferLog[] {
   try {
     return JSON.parse(result);
