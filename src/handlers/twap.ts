@@ -47,19 +47,20 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
     dollarValue = dollarValueIn;
   }
 
-  // Extract dex fee from Transfer logs
+  // TODO: Re-enable receipt parsing for dexFee once Effect performance is acceptable
+  // Currently commented out to avoid 700k+ HyperSync requests during initial sync
   let dexFee: string | undefined;
-  const config = CHAIN_CONFIG[chainId];
-  if (config) {
-    const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
-    const transfers = parseTransferLogs(transfersJson);
-    for (const transfer of transfers) {
-      if (transfer.to === config.feesAddress.toLowerCase()) {
-        dexFee = transfer.amount;
-        break;
-      }
-    }
-  }
+  // const config = CHAIN_CONFIG[chainId];
+  // if (config) {
+  //   const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
+  //   const transfers = parseTransferLogs(transfersJson);
+  //   for (const transfer of transfers) {
+  //     if (transfer.to === config.feesAddress.toLowerCase()) {
+  //       dexFee = transfer.amount;
+  //       break;
+  //     }
+  //   }
+  // }
 
   context.OrderFilled.set({
     id: entityId,

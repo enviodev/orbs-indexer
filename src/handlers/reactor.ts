@@ -27,61 +27,34 @@ Reactor.Fill.handler(async ({ event, context }) => {
   const executorAddress = event.params.filler.toLowerCase();
   const config = CHAIN_CONFIG[chainId];
 
-  const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
-  const transfers = parseTransferLogs(transfersJson);
+  // TODO: Re-enable receipt parsing once Effect performance is acceptable
+  // The Resolved/Surplus/ExtraOut handlers in the same tx populate the Swap entity
+  // with token addresses, amounts, fees and gasFees from their event params directly.
+  // Receipt parsing here is redundant for those fields.
+  //
+  // const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
+  // const transfers = parseTransferLogs(transfersJson);
+  // ... receipt parsing logic ...
 
-  let srcAmount: string | undefined;
-  let srcTokenAddress: string | undefined;
-  let srcTokenSymbol: string | undefined;
-  let dstTokenAddress: string | undefined;
-  let dstTokenSymbol: string | undefined;
-  let dexAmountOut = 0n;
-  let fees: string | undefined;
-  let gasFees: string | undefined;
+  // Swap will be populated by Resolved/Surplus/ExtraOut handlers
+  const dollarValue = new BigDecimal(0);
 
-  const feesAddress = config?.lhFeesAddress?.toLowerCase() || "";
-  const treasuryAddress = config?.treasuryAddress?.toLowerCase() || "";
-  const treasuryAddressNew = config?.treasuryAddressNew?.toLowerCase() || "";
-
-  for (const transfer of transfers) {
-    if (!srcAmount && transfer.from === userAddress && transfer.to === executorAddress) {
-      srcAmount = transfer.amount;
-      srcTokenAddress = transfer.tokenAddress;
-      srcTokenSymbol = await context.effect(getTokenSymbol, `${chainId}:${srcTokenAddress}`);
-    } else if (transfer.from === executorAddress && transfer.to === userAddress) {
-      dexAmountOut += BigInt(transfer.amount);
-      if (!dstTokenAddress) {
-        dstTokenAddress = transfer.tokenAddress;
-        dstTokenSymbol = await context.effect(getTokenSymbol, `${chainId}:${dstTokenAddress}`);
-      }
-    } else if (transfer.to === feesAddress && dstTokenAddress && transfer.tokenAddress === dstTokenAddress) {
-      fees = transfer.amount;
-    } else if (!gasFees && (transfer.to === treasuryAddress || transfer.to === treasuryAddressNew) && dstTokenAddress && transfer.tokenAddress === dstTokenAddress) {
-      gasFees = transfer.amount;
-    }
-  }
-
-  const dollarValue = await fetchTokenUsdValue(
-    context, chainId,
-    srcTokenSymbol, srcTokenAddress, srcAmount,
-    dstTokenSymbol, dstTokenAddress, dexAmountOut > 0n ? dexAmountOut.toString() : undefined
-  );
-
+  // Create initial Swap stub — Resolved/Surplus/ExtraOut handlers will fill in the details
   context.Swap.set({
     id: txId,
     userAddress,
-    srcTokenSymbol,
-    srcTokenAddress,
-    srcAmount,
-    dstTokenSymbol,
     dollarValue,
-    dstTokenAddress,
-    dexAmountOut: dexAmountOut.toString(),
     executorAddress,
     timestamp,
     txHash: event.transaction.hash,
-    fees,
-    gasFees,
+    srcTokenSymbol: undefined,
+    srcTokenAddress: undefined,
+    srcAmount: undefined,
+    dstTokenSymbol: undefined,
+    dstTokenAddress: undefined,
+    dexAmountOut: undefined,
+    fees: undefined,
+    gasFees: undefined,
   });
 
   // Daily aggregation

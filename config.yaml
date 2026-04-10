@@ -210,3 +210,183 @@ chains:
       - name: ExecutorV6
         address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
         start_block: 21120821
+
+  # === ARBITRUM (TWAP + LH V6 only) ===
+  - id: 42161
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0xD63430c74C8E70D9dbdCA04C6a9E6E9E929028DA"
+          - "0x0B94dcC0EA2d1ee33Ab064DaC252de980a941eF3"
+        start_block: 93569402
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 271257667
+
+  # === BSC (TWAP + LH) ===
+  - id: 56
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0x25a0A78f5ad07b2474D3D42F1c1432178465936d"
+          - "0xa6F7444D2b92Aa9F94a2165c77aAF2B671e63994"
+        start_block: 28814551
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 36102005
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 42880593
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 43740708
+
+  # === BASE (TWAP + LH) ===
+  - id: 8453
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0x25a0A78f5ad07b2474D3D42F1c1432178465936d"
+          - "0xc918bdC47264687796Cd54FE362FaC4f8b99Eb55"
+        start_block: 3863077
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 10567228
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 21019375
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 22006393
+
+  # === FANTOM (TWAP + LH) ===
+  - id: 250
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0xdb55107c17Cb433D322052BFA36069fDf7Cb1031"
+          - "0xd3B290FEB04E353d1821bc0a12397FdEa9a846C0"
+        start_block: 67534872
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 76278662
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 94563013
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 96572199
+
+  # === LINEA (TWAP + LH) ===
+  - id: 59144
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0xbE7984eb48E2102549338B533dcF68035e413F66"
+          - "0x48423e62acbfEF7779b5b4a5E7d6Fbd39E623d78"
+        start_block: 1034999
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 1033039
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 10694114
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 11665575
+
+  # === SONIC (TWAP + LH V6 only) ===
+  - id: 146
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0xe94E30ebe3d438dD1e7FE686503E392b1A601566"
+          - "0x8963992816b4EafE5a22b7DB2A99513c18be9afA"
+        start_block: 9820675
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 1351512
+
+  # === SEI (TWAP only) ===
+  - id: 1329
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address:
+          - "0x18C3cEFb4b90bc854b1F7b1852b9862374a43778"
+          - "0xde737dB24548F8d41A4a3Ca2Bac8aaaDc4DBA099"
+        start_block: 110309777
+
+  # === AVALANCHE (TWAP only, new contract) ===
+  - id: 43114
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address: "0xf77Ad005aBF7e31f669ce89a6568B2f39Ca92cDe"
+        start_block: 68399975
+
+  # === BLAST (LH only) ===
+  - id: 81457
+    start_block: 0
+    contracts:
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 988193
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 10009141
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 10996160
+
+  # === POLYGON ZKEVM (LH only) ===
+  - id: 1101
+    start_block: 0
+    contracts:
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 10137770
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 16704919
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 17364842
+
+  # === BERACHAIN (TWAP only, new contract) ===
+  - id: 80094
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address: "0xD13609A8ace04D11Ea2FFE176B69dF77C6d9375E"
+        start_block: 9905762
+
+  # === FLARE (TWAP only, new contract) ===
+  - id: 14
+    start_block: 0
+    contracts:
+      - name: TwapContract
+        address: "0x9D70B0b90915Bb8b9bdAC7e6a7e6435bBF1feC4D"
+        start_block: 39853654
+
+  # === CRONOS ZKEVM (TWAP only) — not supported by HyperSync ===
+  # - id: 388
+  #   start_block: 0
+  #   contracts:
+  #     - name: TwapContract
+  #       address: "0xc32cAA0F7AD9ED88e22Fc214fc24cCb5C0595D68"
+  #       start_block: 1635958
+
+  # === KATANA (TWAP only) — not supported by HyperSync ===
+  # - id: 824
+  #   start_block: 0
+  #   contracts:
+  #     - name: TwapContract
+  #       address: "0xf2d96E7BE676153d202e1453804E2749923C7c5b"
+  #       start_block: 5223433
