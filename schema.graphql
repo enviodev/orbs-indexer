@@ -1,0 +1,634 @@
+# =============================================================================
+# SHARED ENTITIES (used across multiple contracts)
+# =============================================================================
+
+type ContractRegistryAddressUpdated {
+  id: ID!
+  addr: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type InitializationComplete {
+  id: ID!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Locked {
+  id: ID!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type RegistryManagementTransferred {
+  id: ID!
+  previousRegistryAdmin: String!
+  newRegistryAdmin: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Unlocked {
+  id: ID!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# DELEGATIONS ENTITIES
+# =============================================================================
+
+type Delegated {
+  id: ID!
+  from: String!
+  to: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type DelegatedStakeChanged {
+  id: ID!
+  addr: String!
+  selfDelegatedStake: BigInt!
+  delegatedStake: BigInt!
+  delegator: String!
+  delegatorContributedStake: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type DelegationInitialized {
+  id: ID!
+  from: String!
+  to: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Delegator {
+  id: ID!
+  lastChangeBlock: BigInt!
+  lastChangeTime: BigInt!
+  address: String!
+  stake: BigInt!
+  nonStake: BigInt!
+}
+
+type DelegatorMap {
+  id: ID!
+  delegator: Delegator!
+}
+
+type DelegateActions {
+  id: ID!
+  lastChangeBlock: BigInt!
+  lastChangeTime: BigInt!
+  address: String!
+  stake: BigInt!
+  nonStake: BigInt
+}
+
+type DelegationStakes {
+  id: ID!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  selfStake: BigInt!
+  delegatedStake: BigInt!
+  totalStake: BigInt!
+  nDelegates: BigInt!
+}
+
+type GuardianInfo {
+  id: ID!
+  delegatorMap: DelegatorMap
+  nDelegates: BigInt!
+}
+
+type GuardianToDelegators {
+  id: ID!
+  delegators: [String!]!
+}
+
+type DelegatorToGuardian {
+  id: ID!
+  guardian: String!
+}
+
+# =============================================================================
+# COMMITTEE ENTITIES
+# =============================================================================
+
+type CommitteeChange {
+  id: ID!
+  addr: String!
+  weight: BigInt!
+  certification: Boolean!
+  inCommittee: Boolean!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type MaxCommitteeSizeChanged {
+  id: ID!
+  newValue: Int!
+  oldValue: Int!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# CONTRACT REGISTRY ENTITIES
+# =============================================================================
+
+type ContractAddressUpdated {
+  id: ID!
+  contractName: String!
+  addr: String!
+  managedContract: Boolean!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type ContractRegistryUpdated {
+  id: ID!
+  newContractRegistry: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type ManagerChanged {
+  id: ID!
+  role: String!
+  newManager: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# ELECTIONS ENTITIES
+# =============================================================================
+
+type GuardianStatusUpdated {
+  id: ID!
+  guardian: String!
+  readyToSync: Boolean!
+  readyForCommittee: Boolean!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type GuardianVotedOut {
+  id: ID!
+  guardian: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type GuardianVotedUnready {
+  id: ID!
+  guardian: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type MinSelfStakePercentMilleChanged {
+  id: ID!
+  newValue: BigInt!
+  oldValue: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type StakeChanged {
+  id: ID!
+  addr: String!
+  selfDelegatedStake: BigInt!
+  delegatedStake: BigInt!
+  effectiveStake: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VoteOutCasted {
+  id: ID!
+  voter: String!
+  subject: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VoteOutPercentMilleThresholdChanged {
+  id: ID!
+  newValue: BigInt!
+  oldValue: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VoteUnreadyCasted {
+  id: ID!
+  voter: String!
+  subject: String!
+  expiration: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VoteUnreadyPercentMilleThresholdChanged {
+  id: ID!
+  newValue: BigInt!
+  oldValue: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VoteUnreadyTimeoutSecondsChanged {
+  id: ID!
+  newValue: BigInt!
+  oldValue: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# SUBSCRIPTIONS ENTITIES
+# =============================================================================
+
+type GenesisRefTimeDelayChanged {
+  id: ID!
+  newGenesisRefTimeDelay: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type MinimumInitialVcPaymentChanged {
+  id: ID!
+  newMinimumInitialVcPayment: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Payment {
+  id: ID!
+  vcId: BigInt!
+  by: String!
+  amount: BigInt!
+  tier: String!
+  rate: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type SubscriberAdded {
+  id: ID!
+  subscriber: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type SubscriberRemoved {
+  id: ID!
+  subscriber: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type SubscriptionChanged {
+  id: ID!
+  vcId: BigInt!
+  owner: String!
+  name: String!
+  genRefTime: BigInt!
+  tier: String!
+  rate: BigInt!
+  expiresAt: BigInt!
+  isCertified: Boolean!
+  deploymentSubset: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VcConfigRecordChanged {
+  id: ID!
+  vcId: BigInt!
+  key: String!
+  value: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VcCreated {
+  id: ID!
+  vcId: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type VcOwnerChanged {
+  id: ID!
+  vcId: BigInt!
+  previousOwner: String!
+  newOwner: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# PROTOCOL ENTITIES
+# =============================================================================
+
+type ProtocolVersionChanged {
+  id: ID!
+  deploymentSubset: String!
+  currentVersion: BigInt!
+  nextVersion: BigInt!
+  fromTimestamp: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# GUARDIANS REGISTRATION ENTITIES
+# =============================================================================
+
+type GuardianDataUpdated {
+  id: ID!
+  guardian: String!
+  isRegistered: Boolean!
+  ip: String!
+  orbsAddr: String!
+  name: String!
+  website: String!
+  registrationTime: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type GuardianMetadataChanged {
+  id: ID!
+  guardian: String!
+  key: String!
+  newValue: String!
+  oldValue: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type GuardianRegistered {
+  id: ID!
+  guardian: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type GuardianUnregistered {
+  id: ID!
+  guardian: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# CERTIFICATION ENTITIES
+# =============================================================================
+
+type GuardianCertificationUpdate {
+  id: ID!
+  guardian: String!
+  isCertified: Boolean!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+# =============================================================================
+# TWAP ENTITIES
+# =============================================================================
+
+type OrderFilled {
+  id: ID!
+  TWAP_id: Int
+  twapAddress: String!
+  userAddress: String!
+  exchange: String!
+  dex: String!
+  taker: String!
+  srcAmountIn: String!
+  dstAmountOut: String!
+  dstFee: BigInt!
+  dexFee: String
+  srcFilledAmount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+  timestamp: String!
+  srcTokenAddress: String
+  dstTokenAddress: String
+  srcTokenSymbol: String
+  dstTokenSymbol: String
+  dollarValueIn: BigDecimal!
+  dollarValueOut: BigDecimal!
+  type: String!
+}
+
+type FilledDaily {
+  id: ID!
+  date: String!
+  dailyTotalCalculatedValue: BigDecimal!
+  dailyCount: Int
+  dex: String!
+  exchange: String!
+}
+
+type FilledTotal {
+  id: ID!
+  cumulativeTotalCalculatedValue: BigDecimal!
+  totalCount: Int
+}
+
+type DailyActiveUsers {
+  id: ID!
+  userAddresses: [String!]!
+  count: Int!
+}
+
+type OrderCreated {
+  id: ID!
+  Contract_id: BigInt!
+  twapAddress: String!
+  maker: String!
+  exchange: String!
+  ask_exchange: String!
+  ask_srcToken: String!
+  ask_dstToken: String!
+  ask_srcAmount: BigInt!
+  ask_srcBidAmount: BigInt!
+  ask_dstMinAmount: BigInt!
+  ask_deadline: BigInt!
+  ask_bidDelay: BigInt!
+  ask_fillDelay: BigInt!
+  ask_data: String!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+  srcTokenSymbol: String
+  dstTokenSymbol: String
+  dollarValueIn: BigDecimal!
+  timestamp: String!
+  dex: String!
+  type: String!
+}
+
+type CreatedDaily {
+  id: ID!
+  date: String!
+  dailyCount: Int
+  dex: String!
+  exchange: String!
+}
+
+type CreatedTotal {
+  id: ID!
+  totalCount: Int
+}
+
+type Status {
+  id: ID!
+  status: String
+}
+
+type StatusNew {
+  id: ID!
+  twapId: String!
+  twapAddress: String!
+  status: String
+}
+
+type TwapOutputTokens {
+  id: ID!
+  tokenAddresses: [String!]!
+}
+
+# =============================================================================
+# LIQUIDITY HUB ENTITIES
+# =============================================================================
+
+type Fill {
+  id: ID!
+  orderHash: String!
+  filler: String!
+  swapper: String!
+  nonce: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Swap {
+  id: ID!
+  userAddress: String!
+  srcTokenSymbol: String
+  srcTokenAddress: String
+  srcAmount: String
+  dstTokenSymbol: String
+  dollarValue: BigDecimal!
+  dstTokenAddress: String
+  dexAmountOut: String
+  executorAddress: String!
+  timestamp: String!
+  txHash: String!
+  fees: String
+  gasFees: String
+}
+
+type SwapDaily {
+  id: ID!
+  date: String!
+  dailyTotalCalculatedValue: BigDecimal!
+  dailyCount: Int
+}
+
+type SwapTotal {
+  id: ID!
+  cumulativeTotalCalculatedValue: BigDecimal!
+  totalCount: Int
+}
+
+type Resolved {
+  id: ID!
+  orderHash: String!
+  swapper: String!
+  ref: String!
+  inToken: String!
+  outToken: String!
+  inAmount: BigInt!
+  outAmount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type Surplus {
+  id: ID!
+  swapper: String!
+  ref: String!
+  token: String!
+  amount: BigInt!
+  refshare: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type ExtraOut {
+  id: ID!
+  recipient: String!
+  token: String!
+  amount: BigInt!
+  blockNumber: BigInt!
+  blockTimestamp: BigInt!
+  transactionHash: String!
+}
+
+type LhOutputTokens {
+  id: ID!
+  tokenAddresses: [String!]!
+}

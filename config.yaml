@@ -1,0 +1,212 @@
+# yaml-language-server: $schema=./node_modules/envio/evm.schema.json
+name: orbs-indexer
+description: Orbs Protocol Indexer (Delegations, Committee, TWAP, Liquidity Hub)
+
+field_selection:
+  transaction_fields:
+    - hash
+    - input
+
+contracts:
+  # === DELEGATIONS ===
+  - name: Delegations
+    abi_file_path: ./abis/Delegations.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: Delegated(address indexed sender, address indexed recipient)
+      - event: DelegatedStakeChanged(address indexed addr, uint256 selfDelegatedStake, uint256 delegatedStake, address indexed delegator, uint256 delegatorContributedStake)
+      - event: DelegationInitialized(address indexed sender, address indexed recipient)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: Unlocked()
+
+  # === COMMITTEE ===
+  - name: Committee
+    abi_file_path: ./abis/Committee.json
+    events:
+      - event: CommitteeChange(address indexed addr, uint256 weight, bool certification, bool inCommittee)
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: MaxCommitteeSizeChanged(uint8 newValue, uint8 oldValue)
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: Unlocked()
+
+  # === CONTRACT REGISTRY ===
+  - name: OrbsContractRegistry
+    abi_file_path: ./abis/ContractRegistry.json
+    events:
+      - event: ContractAddressUpdated(string contractName, address addr, bool managedContract)
+      - event: ContractRegistryUpdated(address newContractRegistry)
+      - event: ManagerChanged(string role, address newManager)
+
+  # === ELECTIONS ===
+  - name: Elections
+    abi_file_path: ./abis/Elections.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: GuardianStatusUpdated(address indexed guardian, bool readyToSync, bool readyForCommittee)
+      - event: GuardianVotedOut(address indexed guardian)
+      - event: GuardianVotedUnready(address indexed guardian)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: MinSelfStakePercentMilleChanged(uint32 newValue, uint32 oldValue)
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: StakeChanged(address indexed addr, uint256 selfDelegatedStake, uint256 delegatedStake, uint256 effectiveStake)
+      - event: Unlocked()
+      - event: VoteOutCasted(address indexed voter, address indexed subject)
+      - event: VoteOutPercentMilleThresholdChanged(uint32 newValue, uint32 oldValue)
+      - event: VoteUnreadyCasted(address indexed voter, address indexed subject, uint256 expiration)
+      - event: VoteUnreadyPercentMilleThresholdChanged(uint32 newValue, uint32 oldValue)
+      - event: VoteUnreadyTimeoutSecondsChanged(uint32 newValue, uint32 oldValue)
+
+  # === SUBSCRIPTIONS ===
+  - name: OrbsSubscriptions
+    abi_file_path: ./abis/Subscriptions.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: GenesisRefTimeDelayChanged(uint256 newGenesisRefTimeDelay)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: MinimumInitialVcPaymentChanged(uint256 newMinimumInitialVcPayment)
+      - event: Payment(uint256 indexed vcId, address by, uint256 amount, string tier, uint256 rate)
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: SubscriberAdded(address subscriber)
+      - event: SubscriberRemoved(address subscriber)
+      - event: SubscriptionChanged(uint256 indexed vcId, address owner, string name, uint256 genRefTime, string tier, uint256 rate, uint256 expiresAt, bool isCertified, string deploymentSubset)
+      - event: Unlocked()
+      - event: VcConfigRecordChanged(uint256 indexed vcId, string key, string value)
+      - event: VcCreated(uint256 indexed vcId)
+      - event: VcOwnerChanged(uint256 indexed vcId, address previousOwner, address newOwner)
+
+  # === PROTOCOL ===
+  - name: Protocol
+    abi_file_path: ./abis/Protocol.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: ProtocolVersionChanged(string deploymentSubset, uint256 currentVersion, uint256 nextVersion, uint256 fromTimestamp)
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: Unlocked()
+
+  # === GUARDIANS REGISTRATION ===
+  - name: GuardiansRegistration
+    abi_file_path: ./abis/GuardiansRegistration.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: GuardianDataUpdated(address indexed guardian, bool isRegistered, bytes4 ip, address orbsAddr, string name, string website, uint256 registrationTime)
+      - event: GuardianMetadataChanged(address indexed guardian, string key, string newValue, string oldValue)
+      - event: GuardianRegistered(address indexed guardian)
+      - event: GuardianUnregistered(address indexed guardian)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: Unlocked()
+
+  # === CERTIFICATION ===
+  - name: Certification
+    abi_file_path: ./abis/Certification.json
+    events:
+      - event: ContractRegistryAddressUpdated(address addr)
+      - event: GuardianCertificationUpdate(address indexed guardian, bool isCertified)
+      - event: InitializationComplete()
+      - event: Locked()
+      - event: RegistryManagementTransferred(address indexed previousRegistryAdmin, address indexed newRegistryAdmin)
+      - event: Unlocked()
+
+  # === TWAP ===
+  - name: TwapContract
+    abi_file_path: ./abis/TWAP.json
+    events:
+      - event: OrderFilled(uint64 indexed id, address indexed maker, address indexed exchange, address taker, uint256 srcAmountIn, uint256 dstAmountOut, uint256 dstFee, uint256 srcFilledAmount)
+      - event: OrderCreated(uint64 indexed id, address indexed maker, address indexed exchange, (address,address,address,uint256,uint256,uint256,uint32,uint32,uint32,bytes) ask)
+      - event: OrderCanceled(uint64 indexed id, address indexed maker, address exchange)
+      - event: OrderCompleted(uint64 indexed id, address indexed maker, address indexed exchange, address taker)
+
+  # === LIQUIDITY HUB: REACTOR ===
+  - name: Reactor
+    abi_file_path: ./abis/ExclusiveDutchOrderReactor.json
+    events:
+      - event: Fill(bytes32 indexed orderHash, address indexed filler, address indexed swapper, uint256 nonce)
+
+  # === LIQUIDITY HUB: EXECUTOR V5 ===
+  - name: ExecutorV5
+    abi_file_path: ./abis/Executor.json
+    events:
+      - event: Resolved(bytes32 indexed orderHash, address indexed swapper, address indexed ref, address inToken, address outToken, uint256 inAmount, uint256 outAmount)
+      - event: Surplus(address indexed swapper, address indexed ref, address indexed token, uint256 amount, uint256 refshare)
+
+  # === LIQUIDITY HUB: EXECUTOR V6 ===
+  - name: ExecutorV6
+    abi_file_path: ./abis/ExecutorV6.json
+    events:
+      - event: ExtraOut(address indexed recipient, address token, uint256 amount)
+      - event: Resolved(bytes32 indexed orderHash, address indexed swapper, address indexed ref, address inToken, address outToken, uint256 inAmount, uint256 outAmount)
+        name: ResolvedV6
+      - event: Surplus(address indexed swapper, address ref, address token, uint256 amount, uint256 refshare)
+        name: SurplusV6
+
+chains:
+  # === POLYGON (Delegations + TWAP + LH) ===
+  - id: 137
+    start_block: 0
+    contracts:
+      - name: Delegations
+        address: "0x513d30e66641cB1f2670b5994DD8E2B61ED3C23c"
+        start_block: 25502851
+      - name: TwapContract
+        address:
+          - "0xceFf098C9199c5d9cf24078dc14Eb8F787631cC0"
+          - "0x688C027B0f7FaCeFcBa73e472900d28c12C5bDF4"
+        start_block: 38111490
+      - name: Reactor
+        address: "0x21Da9737764527e75C17F1AB26Cb668b66dEE0a0"
+        start_block: 46826301
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 62860671
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 63910473
+
+  # === ETHEREUM MAINNET (Committee + TWAP + LH) ===
+  - id: 1
+    start_block: 0
+    contracts:
+      - name: Committee
+        address: "0x1a4c7891d2d04b2cd413b98bc3283c8d992f5fa7"
+        start_block: 11191418
+      - name: OrbsContractRegistry
+        address: "0xD859701C81119aB12A1e62AF6270aD2AE05c7AB3"
+        start_block: 11191401
+      - name: Elections
+        address: "0x02Ca9F2c5dD0635516241efD480091870277865b"
+        start_block: 11191410
+      - name: OrbsSubscriptions
+        address: "0xD11EFC10cf3A54B12e3F04143070BE3865E7Bb8E"
+        start_block: 11191412
+      - name: Protocol
+        address: "0xeda03aDAbD68Da5B01326575712F01029d99703a"
+        start_block: 11191416
+      - name: GuardiansRegistration
+        address: "0xcE97F8C79228C53B8B9Ad86800A493d1e7E5d1E3"
+        start_block: 11191421
+      - name: Certification
+        address: "0x8D2A2A4DbDF9C9D9DFF72ABc96a2751b70AB3011"
+        start_block: 11191417
+      - name: TwapContract
+        address:
+          - "0x037E2bda7B1f03411ba5E96ACb7F36a7D19c3D83"
+          - "0xb1ed8BCAD1EaC8a1DF0764700472391800D12946"
+        start_block: 20586254
+      - name: Reactor
+        address: "0xe9E78109c89162cEF32Bfe7cBCEe1f31312fc1F6"
+        start_block: 20261736
+      - name: ExecutorV5
+        address: "0x2329a3c7f1b83D234Df298b3BB1785cE722AefdE"
+        start_block: 20933678
+      - name: ExecutorV6
+        address: "0x9B350b26B82F3c088e1C0C345a904ee5EB655E15"
+        start_block: 21120821
