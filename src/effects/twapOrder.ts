@@ -1,23 +1,19 @@
 import { createEffect, S } from "envio";
-import { createPublicClient, http, parseAbi } from "viem";
-import { polygon, mainnet } from "viem/chains";
+import { createPublicClient, http, parseAbi, defineChain } from "viem";
 
 const TWAP_ABI = parseAbi([
   "function order(uint64 id) view returns (uint64, uint32, address, address, uint256, address, (address exchange, address srcToken, address dstToken, uint256 srcAmount, uint256 srcBidAmount, uint256 dstMinAmount, uint32 deadline, uint32 bidDelay, uint32 fillDelay, bytes data))",
 ]);
-
-function getViemChain(chainId: number) {
-  if (chainId === 137) return polygon;
-  if (chainId === 1) return mainnet;
-  return mainnet;
-}
 
 const clientCache = new Map<number, ReturnType<typeof createPublicClient>>();
 function getClient(chainId: number) {
   if (!clientCache.has(chainId)) {
     const rpcUrl = process.env[`ENVIO_RPC_URL_${chainId}`] || "";
     if (!rpcUrl) return null;
-    clientCache.set(chainId, createPublicClient({ chain: getViemChain(chainId), transport: http(rpcUrl) }));
+    clientCache.set(chainId, createPublicClient({
+      chain: defineChain({ id: chainId, name: `chain-${chainId}`, nativeCurrency: { name: "ETH", symbol: "ETH", decimals: 18 }, rpcUrls: { default: { http: [rpcUrl] } } }),
+      transport: http(rpcUrl),
+    }));
   }
   return clientCache.get(chainId)!;
 }
