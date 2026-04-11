@@ -70,15 +70,15 @@ ExecutorV5.Resolved.handler(async ({ event, context }) => {
   const treasuryAddress = config?.treasuryAddress?.toLowerCase() || "";
   const treasuryAddressNew = config?.treasuryAddressNew?.toLowerCase() || "";
 
-  // TODO: Re-enable receipt parsing for gasFees once Effect performance is acceptable
-  const gasFees = "0";
-  // const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
-  // const transfers = parseTransferLogs(transfersJson);
-  // for (const transfer of transfers) {
-  //   if ((transfer.to === treasuryAddress || transfer.to === treasuryAddressNew) && transfer.tokenAddress === dstTokenAddress) {
-  //     gasFees = transfer.amount;
-  //   }
-  // }
+  // Extract gasFees from Transfer logs via HyperSync (V5 only — V6 uses ExtraOut)
+  let gasFees = "0";
+  const transfersJson = await context.effect(getTransferLogs, `${chainId}:${event.block.number}:${event.transaction.hash}`);
+  const transfers = parseTransferLogs(transfersJson);
+  for (const transfer of transfers) {
+    if ((transfer.to === treasuryAddress || transfer.to === treasuryAddressNew) && transfer.tokenAddress === dstTokenAddress) {
+      gasFees = transfer.amount;
+    }
+  }
 
   const nativeAsset = config?.nativeAsset || "ETH";
   const timestamp = formatTimestamp(event.block.timestamp);
