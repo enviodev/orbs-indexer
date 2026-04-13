@@ -1,9 +1,56 @@
 import { createEffect, S } from "envio";
-import { createPublicClient, http, parseAbi, defineChain } from "viem";
+import { createPublicClient, http, defineChain } from "viem";
 
-const TWAP_ABI = parseAbi([
-  "function order(uint64 id) view returns (uint64, uint32, address, address, uint256, address, (address exchange, address srcToken, address dstToken, uint256 srcAmount, uint256 srcBidAmount, uint256 dstMinAmount, uint32 deadline, uint32 bidDelay, uint32 fillDelay, bytes data))",
-]);
+const TWAP_ABI = [
+  {
+    name: "order",
+    type: "function",
+    stateMutability: "view",
+    inputs: [{ name: "id", type: "uint64" }],
+    outputs: [
+      {
+        name: "",
+        type: "tuple",
+        components: [
+          { name: "id", type: "uint64" },
+          { name: "status", type: "uint32" },
+          { name: "time", type: "uint32" },
+          { name: "filledTime", type: "uint32" },
+          { name: "srcFilledAmount", type: "uint256" },
+          { name: "maker", type: "address" },
+          {
+            name: "ask",
+            type: "tuple",
+            components: [
+              { name: "exchange", type: "address" },
+              { name: "srcToken", type: "address" },
+              { name: "dstToken", type: "address" },
+              { name: "srcAmount", type: "uint256" },
+              { name: "srcBidAmount", type: "uint256" },
+              { name: "dstMinAmount", type: "uint256" },
+              { name: "deadline", type: "uint32" },
+              { name: "bidDelay", type: "uint32" },
+              { name: "fillDelay", type: "uint32" },
+              { name: "data", type: "bytes" },
+            ],
+          },
+          {
+            name: "bid",
+            type: "tuple",
+            components: [
+              { name: "time", type: "uint32" },
+              { name: "taker", type: "address" },
+              { name: "exchange", type: "address" },
+              { name: "dstAmount", type: "uint256" },
+              { name: "dstFee", type: "uint256" },
+              { name: "data", type: "bytes" },
+            ],
+          },
+        ],
+      },
+    ],
+  },
+] as const;
 
 const clientCache = new Map<number, ReturnType<typeof createPublicClient>>();
 function getClient(chainId: number) {
@@ -41,8 +88,7 @@ export const getTwapOrder = createEffect(
         functionName: "order",
         args: [orderId],
       });
-      const ask = result[6];
-      return JSON.stringify({ srcToken: ask.srcToken, dstToken: ask.dstToken });
+      return JSON.stringify({ srcToken: result.ask.srcToken, dstToken: result.ask.dstToken });
     } catch {
       return "";
     }
