@@ -18,18 +18,20 @@ function getClient(chainId: number) {
   return clientCache.get(chainId)!;
 }
 
-// Input: "chainId:oracleAddress"
+// Input: "chainId:oracleAddress:blockNumber"
 export const getChainlinkPrice = createEffect(
   {
     name: "getChainlinkPrice",
     input: S.string,
-    output: S.string, // Return as string to avoid bigint serialization issues
-    cache: false,
+    output: S.string,
+    cache: true,
     rateLimit: false,
   },
   async ({ input }) => {
-    const [chainIdStr, oracleAddress] = input.split(":");
-    const chainId = Number(chainIdStr);
+    const parts = input.split(":");
+    const chainId = Number(parts[0]);
+    const oracleAddress = parts[1];
+    const blockNumber = parts[2] ? BigInt(parts[2]) : undefined;
     const client = getClient(chainId);
     if (!client) return "";
     try {
@@ -37,6 +39,7 @@ export const getChainlinkPrice = createEffect(
         address: oracleAddress as `0x${string}`,
         abi: CHAINLINK_ABI,
         functionName: "latestAnswer",
+        blockNumber,
       });
       return answer.toString();
     } catch {

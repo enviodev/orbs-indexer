@@ -95,7 +95,8 @@ ExecutorV5.Resolved.handler(async ({ event, context }) => {
   const dollarValue = await fetchTokenUsdValue(
     context, chainId,
     srcTokenSymbol, event.params.inToken.toLowerCase(), event.params.inAmount.toString(),
-    dstTokenSymbol, dstTokenAddress, dexAmountOut
+    dstTokenSymbol, dstTokenAddress, dexAmountOut,
+    event.block.number
   );
 
   context.Swap.set({
@@ -193,7 +194,8 @@ ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
   const dollarValue = await fetchTokenUsdValue(
     context, chainId,
     srcTokenSymbol, event.params.inToken.toLowerCase(), event.params.inAmount.toString(),
-    dstTokenSymbol, dstTokenAddress, dexAmountOut
+    dstTokenSymbol, dstTokenAddress, dexAmountOut,
+    event.block.number
   );
 
   context.Swap.set({

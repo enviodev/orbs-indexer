@@ -35,11 +35,11 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
   }
 
   const dollarValueIn = srcTokenSymbol && srcTokenAddress
-    ? (await fetchUSDValue(context, chainId, srcTokenSymbol, srcTokenAddress)).times(new BigDecimal(srcAmountInStr))
+    ? (await fetchUSDValue(context, chainId, srcTokenSymbol, srcTokenAddress, event.block.number)).times(new BigDecimal(srcAmountInStr))
     : new BigDecimal(0);
 
   const dollarValueOut = dstTokenSymbol && dstTokenAddress
-    ? (await fetchUSDValue(context, chainId, dstTokenSymbol, dstTokenAddress)).times(new BigDecimal(dstAmountOutStr))
+    ? (await fetchUSDValue(context, chainId, dstTokenSymbol, dstTokenAddress, event.block.number)).times(new BigDecimal(dstAmountOutStr))
     : new BigDecimal(0);
 
   let dollarValue = dollarValueOut;

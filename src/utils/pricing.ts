@@ -13,7 +13,8 @@ export async function fetchUSDValue(
   context: any,
   chainId: number,
   assetName: string,
-  assetAddress: string
+  assetAddress: string,
+  blockNumber?: number
 ): Promise<BigDecimal> {
   const config = CHAIN_CONFIG[chainId];
   if (!config) return new BigDecimal(0);
@@ -23,8 +24,8 @@ export async function fetchUSDValue(
     const decimals = await context.effect(getTokenDecimals, `${chainId}:${assetAddress}`);
     const divFactor = generateDivFactor(decimals);
 
-    // Chainlink oracle
-    const priceStr = await context.effect(getChainlinkPrice, `${chainId}:${oracleId}`);
+    // Chainlink oracle at specific block for historical accuracy
+    const priceStr = await context.effect(getChainlinkPrice, `${chainId}:${oracleId}:${blockNumber || ""}`);
     if (priceStr) {
       return new BigDecimal(priceStr).div(divFactor).div(FACTOR_1E8);
     }
@@ -41,16 +42,17 @@ export async function fetchTokenUsdValue(
   srcAmount: string | null | undefined,
   dstTokenSymbol: string | null | undefined,
   dstTokenAddress: string | null | undefined,
-  dexAmountOut: string | null | undefined
+  dexAmountOut: string | null | undefined,
+  blockNumber?: number
 ): Promise<BigDecimal> {
   if (srcAmount && srcTokenSymbol && srcTokenAddress) {
-    const price = await fetchUSDValue(context, chainId, srcTokenSymbol, srcTokenAddress);
+    const price = await fetchUSDValue(context, chainId, srcTokenSymbol, srcTokenAddress, blockNumber);
     if (!price.isZero()) {
       return price.times(new BigDecimal(srcAmount));
     }
   }
   if (dexAmountOut && dstTokenSymbol && dstTokenAddress) {
-    const price = await fetchUSDValue(context, chainId, dstTokenSymbol, dstTokenAddress);
+    const price = await fetchUSDValue(context, chainId, dstTokenSymbol, dstTokenAddress, blockNumber);
     if (!price.isZero()) {
       return price.times(new BigDecimal(dexAmountOut));
     }
