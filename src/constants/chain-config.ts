@@ -291,7 +291,10 @@ export const CHAIN_CONFIG: Record<number, ChainConfig> = {
       MATIC: "0x9ce4473B42a639d010eD741df3CA829E6e480803",
       AAVE: "0x09B0a8AFD9185500d7C64FC68338b4C50db6df1d",
       ARB: "0x28606F10277Cc2e99e57ae2C55D26860E13A1BBD",
-      FOXY: "0xdE14081b6bd39230EcA7Be1137413b7b87B07C07",
+      // FOXY intentionally omitted — the configured oracle 0xdE14081b6bd...
+      // is not a real Chainlink feed (decimals() reverts) but latestAnswer()
+      // returns ~1e16 garbage values, producing $1e13 dollar values per swap.
+      // See PRICING_NOTES.md.
       LINK: "0x8dF01C2eFed1404872b54a69f40a57FeC1545998",
       POL: "0xEF77B4A7D92eBDC89025B8E11916A69BDA6d189c",
       wstETH: "0x8eCE1AbA32716FdDe8D6482bfd88E9a0ee01f565",
@@ -319,9 +322,15 @@ export const CHAIN_CONFIG: Record<number, ChainConfig> = {
         baseAssetAddress: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       },
       RAM: {
+        // RAM/WETH pool ordering: WETH = token0, RAM = token1 (by hex sort).
+        // poolPrice = real_WETH/real_RAM, so per-raw-RAM = poolPrice * basePerRawWETH.
+        // Original subgraph uses the LYNX-style `basePrice / pool` here, which is
+        // mathematically wrong for this pool ordering and inflates RAM swaps by
+        // a factor of ~1e10. Use v2recursive (the same formula ARX/BSWAP/BOO use).
+        // See PRICING_NOTES.md for derivation.
         pool: "0x1E50482e9185D9DAC418768D14b2F2AC2b4DAF39",
         decimals: "1e18",
-        type: "v2recursive_inverse",
+        type: "v2recursive",
         baseAsset: "WETH",
         baseAssetAddress: "0x82aF49447D8a07e3bd95BD0d56f35241523fBab1",
       },

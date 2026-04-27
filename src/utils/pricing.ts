@@ -36,11 +36,19 @@ async function getV2Price(context: any, chainId: number, pool: string, blockNumb
 
 // Per-raw-unit USD price for a special token (V2-pool fallback).
 // Mirrors the special-token branches in subgraphs/{liquidity-hub-analytics,orbs-twap}/src/utils/utils.ts
-// fetchUSDValue. Each type uses the pool ratio differently:
-//   v2price                — pool / decimals                   (e.g. QUICK on Polygon, THE on BSC)
-//   v2price_inverse        — decimals / pool                   (e.g. CHR on Arbitrum)
-//   v2recursive            — pool * baseAsset USD price        (e.g. ARX, BSWAP, BOO)
-//   v2recursive_inverse    — baseAsset USD price / pool        (e.g. LYNX, RAM)
+// fetchUSDValue, with two fixes — see PRICING_NOTES.md:
+//
+//   v2price                — pool / decimals                   (QUICK on Polygon, THE on BSC)
+//                            Pool is target/USD-stable; pool returns USD-per-target-real.
+//   v2price_inverse        — 1 / (pool * decimals)             (CHR on Arbitrum)
+//                            Pool returns target/USDC, so USD-per-target = 1/pool.
+//                            Subgraph's `decimals/pool` is dimensionally wrong.
+//   v2recursive            — pool * baseAsset per-raw-USD      (ARX, BSWAP, BOO, RAM)
+//                            Pool ordering: base = token0, target = token1.
+//                            poolPrice = real_base/real_target, per-raw-target = pool * basePerRaw.
+//   v2recursive_inverse    — baseAsset per-raw-USD / pool      (LYNX)
+//                            Pool ordering: target = token0, base = token1.
+//                            poolPrice = real_target/real_base, per-raw-target = basePerRaw / pool.
 async function fetchSpecialTokenUSDValue(
   context: any,
   chainId: number,
@@ -49,14 +57,14 @@ async function fetchSpecialTokenUSDValue(
 ): Promise<BigDecimal> {
   const poolPrice = await getV2Price(context, chainId, special.pool, blockNumber);
   if (!poolPrice) return new BigDecimal(0);
+  if (poolPrice.isZero()) return new BigDecimal(0);
   const decimalsFactor = new BigDecimal(special.decimals);
 
   if (special.type === "v2price") {
     return poolPrice.div(decimalsFactor);
   }
   if (special.type === "v2price_inverse") {
-    if (poolPrice.isZero()) return new BigDecimal(0);
-    return decimalsFactor.div(poolPrice);
+    return new BigDecimal("1").div(poolPrice).div(decimalsFactor);
   }
 
   // recursive types — multiply or divide by base asset's per-raw-unit USD price
@@ -70,7 +78,6 @@ async function fetchSpecialTokenUSDValue(
     return poolPrice.times(basePerRawUnit);
   }
   if (special.type === "v2recursive_inverse") {
-    if (poolPrice.isZero()) return new BigDecimal(0);
     return basePerRawUnit.div(poolPrice);
   }
 

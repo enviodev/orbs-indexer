@@ -177,6 +177,171 @@ the config.
 
 ---
 
-## Bug 2 — placeholder
+## Bug 2 — Linea FOXY oracle returns garbage instead of reverting
+
+### Symptom
+
+Linea (`chain_id = 59144`) cumulative volume hit ~$1.6 × 10¹⁶ ("sixteen
+quadrillion dollars"). The single largest swap claimed $1 × 10¹³ for
+swapping 100K FOXY → 0.379 ETH (real value: ~$1,300).
+
+### Root cause
+
+The original subgraph config `subgraphs/orbs-twap/config/linea.json`
+had:
+
+```
+"foxy": "0xdE14081b6bd39230EcA7Be1137413b7b87B07C07"
+```
+
+This is the **FOXY token contract itself**, not a Chainlink oracle.
+Probing it shows:
+
+```
+decimals()      → reverts
+latestAnswer()  → returns ~10005469022000 (1e16 range, looks like
+                  totalSupply or balanceOf state, not a price)
+```
+
+The pricing math then divides a ~1e16 garbage number by `1e18 *
+1e8 = 1e26` and multiplies by `1e23` raw FOXY input, producing ~$1e13.
+
+### Fix
+
+Drop the FOXY entry from `CHAIN_CONFIG[59144].oracleAddresses`. FOXY
+swaps now contribute `$0` until a real oracle exists. Note that FOXY
+acts as the destination side of many Linea swaps via LH; those swaps
+still get priced via the *other* token in the pair (when that token
+has a valid oracle).
+
+This is the same class of bug as Bug 1 (LINK on Polygon zkEVM): the
+original subgraph config points at a contract that *responds* to the
+Chainlink selectors with garbage instead of reverting cleanly.
+
+## Bug 3 — RAM (Arbitrum) special-token formula was inverted
+
+### Symptom
+
+Arbitrum (`chain_id = 42161`) cumulative volume hit ~$2.1 × 10¹⁵.
+Every inflated swap involved RAM.
+
+### Root cause
+
+The original subgraph treats RAM and LYNX with the same formula:
+
+```ts
+return wethPrice / lynxWeth;  // for LYNX
+return wethPrice / ramWeth;   // for RAM
+```
+
+But LYNX and RAM have **opposite token orderings** in their pools:
+
+| Token | Address (start) | Pool counterpart | Sorted order |
+|-------|-----------------|------------------|--------------|
+| LYNX  | 0x1a51b…        | WETH (0xe5d7…)   | LYNX = token0 |
+| RAM   | 0xaaa6c…        | WETH (0x82af…)   | WETH = token0 |
+
+`getV2Price` returns `real_token0 / real_token1`. Working through the
+dimensions:
+
+- LYNX = token0, WETH = token1 → poolPrice = real_LYNX/real_WETH
+  → per-raw-LYNX = wethPerRaw / poolPrice ✓ subgraph formula correct
+- RAM = token1, WETH = token0 → poolPrice = real_WETH/real_RAM
+  → per-raw-RAM = wethPerRaw × poolPrice ✗ subgraph formula wrong
+
+The subgraph applies LYNX's formula to RAM, inflating per-raw-RAM by
+a factor of ~`(1/poolPrice)²`. With ~250,000 RAM per WETH, that's a
+6×10¹⁰ overstatement.
+
+### Fix
+
+Change RAM's `specialTokens` entry from `v2recursive_inverse` to
+`v2recursive`. ARX and BSWAP (also on Arbitrum/Base, both with WETH
+as token0) already used `v2recursive` correctly — RAM matches their
+pool ordering and should use the same type.
+
+A more robust long-term option: detect token ordering at runtime from
+`getV2PoolReserves` and pick the formula automatically. The current
+fix relies on the operator picking the right `type` — which is fine
+for the small set of special tokens we have, but worth revisiting if
+new ones get added.
+
+## Bug 4 — CHR (Arbitrum) special-token formula was dimensionally wrong
+
+### Symptom
+
+CHR pricing on Arbitrum produced values ~10³⁶× too large. (Volume
+impact small in practice — few CHR trades — but the formula is
+fundamentally broken.)
+
+### Root cause
+
+CHR/USDC pool: CHR = token0 (0x15b2…), USDC = token1 (0xaf88…).
+poolPrice = real_CHR / real_USDC = "CHR per USDC".
+
+What we want: per-raw-CHR USD price.
+
+- 1 USDC = poolPrice CHR → 1 CHR = (1/poolPrice) USDC ≈ (1/poolPrice) USD
+- per-raw-CHR = (1/poolPrice) / 10^CHR_decimals = 1 / (poolPrice × 1e18)
+
+What the original subgraph computes:
+
+```ts
+return CHR_DECIMALS / getV2Price(CHR_USDC_POOL);
+//   = 1e18 / poolPrice
+```
+
+That's `1e18 / poolPrice` instead of `1 / (poolPrice × 1e18)` — off
+by a factor of `1e36`.
+
+### Fix
+
+Update the `v2price_inverse` branch in `pricing.ts` to compute
+`1 / (pool × decimals)` instead of `decimals / pool`.
+
+This diverges from strict subgraph parity but produces sensible USD.
+Polygon and BSC special tokens (QUICK, THE — `v2price` type) use the
+mirror formula `pool / decimals`, which has always been correct
+because their pool ordering puts the USD-stable token as token0.
+
+## Bug 5 — SwapDaily / SwapTotal aggregations contaminated by previous runs
+
+### Symptom
+
+Even after fixing the per-Swap pricing math, `SwapDaily` and
+`SwapTotal` rows hold values inconsistent with their constituent
+`Swap.dollarValue` fields. Example: Fantom 2024-12-26 had 179 swaps
+with combined `Swap.dollarValue` of $1,147 but `SwapDaily` reports
+$995 trillion for that day.
+
+### Root cause
+
+The aggregation logic in `executor.ts` and `reactor.ts` increments
+`SwapDaily.dailyTotalCalculatedValue` and
+`SwapTotal.cumulativeTotalCalculatedValue` once per `Resolved` /
+`ResolvedV6` event using the *current* run's pricing math. When code
+changes, previously-written aggregate values are not recomputed.
+`Swap.dollarValue` *is* recomputed on every Resolved/Surplus, but
+the aggregates only ever monotonically increase.
+
+### Fix
+
+This isn't a code bug per se — it's an artifact of running pricing
+fixes against a database populated by previous (buggier) code. Two
+operator options:
+
+1. **Wipe the database and resync from scratch.** Cleanest fix.
+   All entities (per-swap and aggregate) get recomputed with the
+   current code, no stale values stick. Required after any pricing-
+   logic change that should affect historical data.
+2. **Recompute aggregates from `Swap.dollarValue` rows.** Possible
+   via a one-shot SQL migration but adds complexity. Only worth doing
+   if a full resync is too expensive.
+
+For this customer migration the recommended path is (1) once the
+pricing logic settles. Track when known-buggy code last touched the
+database; everything before that point is suspect.
+
+## Bug 6 — placeholder
 
 Add new bugs above this line as they are discovered.
