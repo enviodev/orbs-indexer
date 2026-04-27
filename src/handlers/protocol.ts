@@ -1,6 +1,6 @@
-import { Protocol } from "generated";
+import { indexer } from "generated";
 
-Protocol.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -10,7 +10,7 @@ Protocol.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   });
 });
 
-Protocol.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "InitializationComplete" }, async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -19,7 +19,7 @@ Protocol.InitializationComplete.handler(async ({ event, context }) => {
   });
 });
 
-Protocol.Locked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "Locked" }, async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -28,7 +28,7 @@ Protocol.Locked.handler(async ({ event, context }) => {
   });
 });
 
-Protocol.ProtocolVersionChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "ProtocolVersionChanged" }, async ({ event, context }) => {
   context.ProtocolVersionChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     deploymentSubset: event.params.deploymentSubset,
@@ -41,7 +41,7 @@ Protocol.ProtocolVersionChanged.handler(async ({ event, context }) => {
   });
 });
 
-Protocol.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -52,7 +52,7 @@ Protocol.RegistryManagementTransferred.handler(async ({ event, context }) => {
   });
 });
 
-Protocol.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Protocol", event: "Unlocked" }, async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),

@@ -383,7 +383,11 @@ chains:
   #       address: "0xc32cAA0F7AD9ED88e22Fc214fc24cCb5C0595D68"
   #       start_block: 1635958
 
-  # === KATANA (TWAP only) — not supported by HyperSync ===
+  # === KATANA (TWAP only) — Katana isn't on HyperSync, so this chain needs an
+  # explicit RPC. To enable: set ENVIO_RPC_URL_824 in .env (gitignored), then
+  # uncomment the block below and add an rpc.url line that references that env
+  # var via the standard envio interpolation syntax (dollar+braces around the
+  # variable name). Never inline the key here.
   # - id: 824
   #   start_block: 0
   #   contracts:
