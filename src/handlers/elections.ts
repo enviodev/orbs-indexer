@@ -1,6 +1,6 @@
-import { Elections } from "generated";
+import { indexer } from "generated";
 
-Elections.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -10,7 +10,7 @@ Elections.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   });
 });
 
-Elections.GuardianStatusUpdated.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "GuardianStatusUpdated" }, async ({ event, context }) => {
   context.GuardianStatusUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -22,7 +22,7 @@ Elections.GuardianStatusUpdated.handler(async ({ event, context }) => {
   });
 });
 
-Elections.GuardianVotedOut.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "GuardianVotedOut" }, async ({ event, context }) => {
   context.GuardianVotedOut.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -32,7 +32,7 @@ Elections.GuardianVotedOut.handler(async ({ event, context }) => {
   });
 });
 
-Elections.GuardianVotedUnready.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "GuardianVotedUnready" }, async ({ event, context }) => {
   context.GuardianVotedUnready.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -42,7 +42,7 @@ Elections.GuardianVotedUnready.handler(async ({ event, context }) => {
   });
 });
 
-Elections.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "InitializationComplete" }, async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -51,7 +51,7 @@ Elections.InitializationComplete.handler(async ({ event, context }) => {
   });
 });
 
-Elections.Locked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "Locked" }, async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -60,7 +60,7 @@ Elections.Locked.handler(async ({ event, context }) => {
   });
 });
 
-Elections.MinSelfStakePercentMilleChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "MinSelfStakePercentMilleChanged" }, async ({ event, context }) => {
   context.MinSelfStakePercentMilleChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newValue: event.params.newValue,
@@ -71,7 +71,7 @@ Elections.MinSelfStakePercentMilleChanged.handler(async ({ event, context }) => 
   });
 });
 
-Elections.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -82,7 +82,7 @@ Elections.RegistryManagementTransferred.handler(async ({ event, context }) => {
   });
 });
 
-Elections.StakeChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "StakeChanged" }, async ({ event, context }) => {
   context.StakeChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -95,7 +95,7 @@ Elections.StakeChanged.handler(async ({ event, context }) => {
   });
 });
 
-Elections.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "Unlocked" }, async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -104,7 +104,7 @@ Elections.Unlocked.handler(async ({ event, context }) => {
   });
 });
 
-Elections.VoteOutCasted.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "VoteOutCasted" }, async ({ event, context }) => {
   context.VoteOutCasted.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     voter: event.params.voter,
@@ -115,7 +115,7 @@ Elections.VoteOutCasted.handler(async ({ event, context }) => {
   });
 });
 
-Elections.VoteOutPercentMilleThresholdChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "VoteOutPercentMilleThresholdChanged" }, async ({ event, context }) => {
   context.VoteOutPercentMilleThresholdChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newValue: event.params.newValue,
@@ -126,7 +126,7 @@ Elections.VoteOutPercentMilleThresholdChanged.handler(async ({ event, context })
   });
 });
 
-Elections.VoteUnreadyCasted.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "VoteUnreadyCasted" }, async ({ event, context }) => {
   context.VoteUnreadyCasted.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     voter: event.params.voter,
@@ -138,7 +138,7 @@ Elections.VoteUnreadyCasted.handler(async ({ event, context }) => {
   });
 });
 
-Elections.VoteUnreadyPercentMilleThresholdChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "VoteUnreadyPercentMilleThresholdChanged" }, async ({ event, context }) => {
   context.VoteUnreadyPercentMilleThresholdChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newValue: event.params.newValue,
@@ -149,7 +149,7 @@ Elections.VoteUnreadyPercentMilleThresholdChanged.handler(async ({ event, contex
   });
 });
 
-Elections.VoteUnreadyTimeoutSecondsChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Elections", event: "VoteUnreadyTimeoutSecondsChanged" }, async ({ event, context }) => {
   context.VoteUnreadyTimeoutSecondsChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newValue: event.params.newValue,

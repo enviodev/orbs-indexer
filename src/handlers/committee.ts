@@ -1,6 +1,6 @@
-import { Committee } from "generated";
+import { indexer } from "generated";
 
-Committee.CommitteeChange.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "CommitteeChange" }, async ({ event, context }) => {
   context.CommitteeChange.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -13,7 +13,7 @@ Committee.CommitteeChange.handler(async ({ event, context }) => {
   });
 });
 
-Committee.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -23,7 +23,7 @@ Committee.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   });
 });
 
-Committee.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "InitializationComplete" }, async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -32,7 +32,7 @@ Committee.InitializationComplete.handler(async ({ event, context }) => {
   });
 });
 
-Committee.Locked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "Locked" }, async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -41,7 +41,7 @@ Committee.Locked.handler(async ({ event, context }) => {
   });
 });
 
-Committee.MaxCommitteeSizeChanged.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "MaxCommitteeSizeChanged" }, async ({ event, context }) => {
   context.MaxCommitteeSizeChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newValue: Number(event.params.newValue),
@@ -52,7 +52,7 @@ Committee.MaxCommitteeSizeChanged.handler(async ({ event, context }) => {
   });
 });
 
-Committee.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -63,7 +63,7 @@ Committee.RegistryManagementTransferred.handler(async ({ event, context }) => {
   });
 });
 
-Committee.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent({ contract: "Committee", event: "Unlocked" }, async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
