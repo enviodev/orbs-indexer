@@ -420,7 +420,8 @@ export const CHAIN_CONFIG: Record<number, ChainConfig> = {
       WBTC: "0xAE243804e1903BdbE26ae5f35bc6E4794Be21574",
       MATIC: "0x7C85dD6eBc1d318E909F22d51e756Cf066643341",
       AAVE: "0xF2F574b5E45E4c179F4AF62BbFDCa7df2e2C6ca9",
-      LINK: "0x0E3eA8Bc02eE78D21Edad8E1E907E575fCa1C1A8",
+      // LINK intentionally omitted — only LINK/ETH feed is published on Polygon zkEVM,
+      // which would produce ETH-denominated values mistaken for USD. See PRICING_NOTES.md.
       POL: "0x44285b60Cc13557935CA4945d20475BD1f1058f4",
     },
   },

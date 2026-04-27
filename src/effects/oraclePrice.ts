@@ -3,6 +3,7 @@ import { createPublicClient, http, parseAbi, defineChain } from "viem";
 
 const CHAINLINK_ABI = parseAbi([
   "function latestAnswer() view returns (int256)",
+  "function decimals() view returns (uint8)",
 ]);
 
 const clientCache = new Map<number, ReturnType<typeof createPublicClient>>();
@@ -17,6 +18,33 @@ function getClient(chainId: number) {
   }
   return clientCache.get(chainId)!;
 }
+
+// Input: "chainId:oracleAddress" — cached by oracle, not block (decimals are immutable per feed).
+export const getChainlinkOracleDecimals = createEffect(
+  {
+    name: "getChainlinkOracleDecimals",
+    input: S.string,
+    output: S.number,
+    cache: true,
+    rateLimit: false,
+  },
+  async ({ input }) => {
+    const [chainIdStr, oracleAddress] = input.split(":");
+    const chainId = Number(chainIdStr);
+    const client = getClient(chainId);
+    if (!client) return 8;
+    try {
+      const d = await client.readContract({
+        address: oracleAddress as `0x${string}`,
+        abi: CHAINLINK_ABI,
+        functionName: "decimals",
+      });
+      return Number(d);
+    } catch {
+      return 8;
+    }
+  }
+);
 
 // Input: "chainId:oracleAddress:blockNumber"
 export const getChainlinkPrice = createEffect(

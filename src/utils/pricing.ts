@@ -1,12 +1,10 @@
 import { BigDecimal } from "generated";
-import { getChainlinkPrice } from "../effects/oraclePrice";
+import { getChainlinkPrice, getChainlinkOracleDecimals } from "../effects/oraclePrice";
 import { getPythPrice } from "../effects/pythPrice";
 import { getV2PoolReserves } from "../effects/v2Pool";
 import { getTokenDecimals } from "../effects/tokenMetadata";
 import { getOracleAddress, CHAIN_CONFIG } from "../constants/chain-config";
 import type { SpecialTokenConfig } from "../constants/chain-config";
-
-const FACTOR_1E8 = new BigDecimal("1e8");
 
 function generateDivFactor(decimals: number): BigDecimal {
   return new BigDecimal("1" + "0".repeat(decimals));
@@ -119,10 +117,12 @@ export async function fetchUSDValue(
     return realPrice.div(divFactor);
   }
 
-  // Chainlink path — historical block-specific call.
+  // Chainlink path — historical block-specific call. Scale by the feed's actual decimals
+  // (most USD feeds are 8, but ETH-paired feeds are 18 — see PRICING_NOTES.md for context).
   const priceStr = await context.effect(getChainlinkPrice, `${chainId}:${oracleId}:${blockNumber || ""}`);
   if (!priceStr) return new BigDecimal(0);
-  return new BigDecimal(priceStr).div(divFactor).div(FACTOR_1E8);
+  const oracleDecimals = await context.effect(getChainlinkOracleDecimals, `${chainId}:${oracleId}`);
+  return new BigDecimal(priceStr).div(divFactor).div(generateDivFactor(oracleDecimals));
 }
 
 export async function fetchTokenUsdValue(
