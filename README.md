@@ -1,32 +1,44 @@
 # Orbs Indexer
 
-A multichain Orbs Protocol indexer built with [Envio HyperIndex](https://docs.envio.dev). Tracks delegations, the guardian committee, elections, governance, the Orbs subscription system, TWAP execution, and the Liquidity Hub across 14 chains.
+Orbs Protocol Indexer (Delegations, Committee, TWAP, Liquidity Hub). Built with [Envio HyperIndex](https://docs.envio.dev).
 
-## Chains (14)
+## Chains
 
-`1`, `14`, `56`, `137`, `146`, `250`, `1101`, `1329`, `8453`, `42161`, `43114`, `59144`, `80094`, `81457`
+| Network | Chain ID |
+|---|---|
+| Polygon | 137 |
+| Ethereum Mainnet | 1 |
+| Arbitrum | 42161 |
+| Bsc | 56 |
+| Base | 8453 |
+| Fantom | 250 |
+| Linea | 59144 |
+| Sonic | 146 |
+| Sei* | 1329 |
+| Avalanche | 43114 |
+| Blast | 81457 |
+| Polygon zkEVM | 1101 |
+| Berachain | 80094 |
+| Flare | 14 |
 
-## What it indexes
+## Contracts
 
-### Core registries and protocol
-- `OrbsContractRegistry`, `Protocol`: registry address updates, lock/unlock, registry management
-- `Certification`, `GuardiansRegistration`: guardian status, certifications
+- **`Delegations`**: `ContractRegistryAddressUpdated`, `Delegated`, `DelegatedStakeChanged`, `DelegationInitialized`, `InitializationComplete`, `Locked`, `RegistryManagementTransferred`, `Unlocked`
+- **`Committee`**: `CommitteeChange`, `ContractRegistryAddressUpdated`, `InitializationComplete`, `Locked`, `MaxCommitteeSizeChanged`, `RegistryManagementTransferred`, `Unlocked`
+- **`OrbsContractRegistry`**: `ContractAddressUpdated`, `ContractRegistryUpdated`, `ManagerChanged`
+- **`Elections`**: `ContractRegistryAddressUpdated`, `GuardianStatusUpdated`, `GuardianVotedOut`, `GuardianVotedUnready`, `InitializationComplete`, `Locked`, `MinSelfStakePercentMilleChanged`, `RegistryManagementTransferred`, `StakeChanged`, `Unlocked`, `VoteOutCasted`, `VoteOutPercentMilleThresholdChanged`, `VoteUnreadyCasted`, `VoteUnreadyPercentMilleThresholdChanged`, `VoteUnreadyTimeoutSecondsChanged`
+- **`OrbsSubscriptions`**: `ContractRegistryAddressUpdated`, `GenesisRefTimeDelayChanged`, `InitializationComplete`, `Locked`, `MinimumInitialVcPaymentChanged`, `Payment`, `RegistryManagementTransferred`, `SubscriberAdded`, `SubscriberRemoved`, `SubscriptionChanged`, `Unlocked`, `VcConfigRecordChanged`, `VcCreated`, `VcOwnerChanged`
+- **`Protocol`**: `ContractRegistryAddressUpdated`, `InitializationComplete`, `Locked`, `ProtocolVersionChanged`, `RegistryManagementTransferred`, `Unlocked`
+- **`GuardiansRegistration`**: `ContractRegistryAddressUpdated`, `GuardianDataUpdated`, `GuardianMetadataChanged`, `GuardianRegistered`, `GuardianUnregistered`, `InitializationComplete`, `Locked`, `RegistryManagementTransferred`, `Unlocked`
+- **`Certification`**: `ContractRegistryAddressUpdated`, `GuardianCertificationUpdate`, `InitializationComplete`, `Locked`, `RegistryManagementTransferred`, `Unlocked`
+- **`TwapContract`**: `OrderFilled`, `OrderCreated`, `OrderCanceled`, `OrderCompleted`
+- **`Reactor`**: `Fill`
+- **`ExecutorV5`**: `Resolved`, `Surplus`
+- **`ExecutorV6`**: `ExtraOut`, `ResolvedV6`, `SurplusV6`
 
-### Delegations and committee
-- `Delegations`: delegator-to-guardian delegations, stake changes, delegation initialisation
-- `Committee`: committee changes, max-size updates, manager changes
-- `Elections`: guardian status, voting unready/out, min self-stake, stake changes
+## Schema entities (63)
 
-### Subscriptions
-- `OrbsSubscriptions`: Orbs subscription lifecycle
-
-### TWAP and Liquidity Hub
-- `Reactor`, `TwapContract`: TWAP execution and Liquidity Hub events
-- `ExecutorV5`, `ExecutorV6`: executor versions
-
-## Schema
-
-63 GraphQL entities including `Delegator`, `DelegatorMap`, `DelegateActions`, `DelegationStakes`, `GuardianInfo`, `GuardianToDelegators`, `DelegatorToGuardian`, `CommitteeChange`, `StakeChanged`, plus event-level entities.
+`ContractRegistryAddressUpdated`, `InitializationComplete`, `Locked`, `RegistryManagementTransferred`, `Unlocked`, `Delegated`, `DelegatedStakeChanged`, `DelegationInitialized`, `Delegator`, `DelegatorMap`, `DelegateActions`, `DelegationStakes`, `GuardianInfo`, `GuardianToDelegators`, `DelegatorToGuardian`, `CommitteeChange`, `MaxCommitteeSizeChanged`, `ContractAddressUpdated`, `ContractRegistryUpdated`, `ManagerChanged`, `GuardianStatusUpdated`, `GuardianVotedOut`, `GuardianVotedUnready`, `MinSelfStakePercentMilleChanged`, `StakeChanged`, `VoteOutCasted`, `VoteOutPercentMilleThresholdChanged`, `VoteUnreadyCasted`, `VoteUnreadyPercentMilleThresholdChanged`, `VoteUnreadyTimeoutSecondsChanged`, `GenesisRefTimeDelayChanged`, `MinimumInitialVcPaymentChanged`, `Payment`, `SubscriberAdded`, `SubscriberRemoved`, `SubscriptionChanged`, `VcConfigRecordChanged`, `VcCreated`, `VcOwnerChanged`, `ProtocolVersionChanged`, `GuardianDataUpdated`, `GuardianMetadataChanged`, `GuardianRegistered`, `GuardianUnregistered`, `GuardianCertificationUpdate`, `OrderFilled`, `FilledDaily`, `FilledTotal`, `DailyActiveUsers`, `OrderCreated`, `CreatedDaily`, `CreatedTotal`, `Status`, `StatusNew`, `TwapOutputTokens`, `Fill`, `Swap`, `SwapDaily`, `SwapTotal`, `Resolved`, `Surplus`, `ExtraOut`, `LhOutputTokens`
 
 ## Run locally
 
