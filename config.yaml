@@ -383,9 +383,14 @@ chains:
   #       address: "0xc32cAA0F7AD9ED88e22Fc214fc24cCb5C0595D68"
   #       start_block: 1635958
 
-  # === KATANA (TWAP only) — not supported by HyperSync ===
+  # === KATANA (TWAP only) — Katana isn't on HyperSync, so this chain needs an
+  # explicit RPC. Set ENVIO_RPC_URL_824 in .env (gitignored) and reference it
+  # via ${ENVIO_RPC_URL_824} below when uncommenting. Never inline the key here.
   # - id: 824
   #   start_block: 0
+  #   rpc:
+  #     url: ${ENVIO_RPC_URL_824}
+  #     for: sync
   #   contracts:
   #     - name: TwapContract
   #       address: "0xf2d96E7BE676153d202e1453804E2749923C7c5b"
