@@ -1,4 +1,4 @@
-import { indexer, BigDecimal } from "generated";
+import { ExecutorV5, ExecutorV6, BigDecimal } from "generated";
 import { CHAIN_CONFIG, SWAP_TOTAL_ID } from "../constants/chain-config";
 import { formatTimestamp } from "../utils/helpers";
 import { getTokenSymbol } from "../effects/tokenMetadata";
@@ -46,7 +46,7 @@ async function saveLhOutputToken(context: any, chainId: number, dstTokenAddress:
 }
 
 // === ExecutorV5 Resolved ===
-indexer.onEvent({ contract: "ExecutorV5", event: "Resolved" }, async ({ event, context }) => {
+ExecutorV5.Resolved.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -121,7 +121,7 @@ indexer.onEvent({ contract: "ExecutorV5", event: "Resolved" }, async ({ event, c
 });
 
 // === ExecutorV5 Surplus ===
-indexer.onEvent({ contract: "ExecutorV5", event: "Surplus" }, async ({ event, context }) => {
+ExecutorV5.Surplus.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -159,7 +159,7 @@ indexer.onEvent({ contract: "ExecutorV5", event: "Surplus" }, async ({ event, co
 });
 
 // === ExecutorV6 ResolvedV6 ===
-indexer.onEvent({ contract: "ExecutorV6", event: "ResolvedV6" }, async ({ event, context }) => {
+ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -213,7 +213,7 @@ indexer.onEvent({ contract: "ExecutorV6", event: "ResolvedV6" }, async ({ event,
 });
 
 // === ExecutorV6 SurplusV6 ===
-indexer.onEvent({ contract: "ExecutorV6", event: "SurplusV6" }, async ({ event, context }) => {
+ExecutorV6.SurplusV6.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -251,7 +251,7 @@ indexer.onEvent({ contract: "ExecutorV6", event: "SurplusV6" }, async ({ event, 
 });
 
 // === ExecutorV6 ExtraOut ===
-indexer.onEvent({ contract: "ExecutorV6", event: "ExtraOut" }, async ({ event, context }) => {
+ExecutorV6.ExtraOut.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;

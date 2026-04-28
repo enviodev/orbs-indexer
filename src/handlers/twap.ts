@@ -1,4 +1,4 @@
-import { indexer, BigDecimal } from "generated";
+import { TwapContract, BigDecimal } from "generated";
 import { getDexByRouter } from "../constants/dex-routers";
 import { CHAIN_CONFIG } from "../constants/chain-config";
 import { formatTimestamp } from "../utils/helpers";
@@ -7,7 +7,7 @@ import { getTwapOrder, parseTwapOrder } from "../effects/twapOrder";
 import { getTransferLogs, parseTransferLogs } from "../effects/transactionReceipt";
 import { fetchUSDValue } from "../utils/pricing";
 
-indexer.onEvent({ contract: "TwapContract", event: "OrderFilled" }, async ({ event, context }) => {
+TwapContract.OrderFilled.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const entityId = `${chainId}_${event.transaction.hash}_${event.logIndex}`;
@@ -124,7 +124,7 @@ indexer.onEvent({ contract: "TwapContract", event: "OrderFilled" }, async ({ eve
   }
 });
 
-indexer.onEvent({ contract: "TwapContract", event: "OrderCreated" }, async ({ event, context }) => {
+TwapContract.OrderCreated.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const entityId = `${chainId}_${event.transaction.hash}_${event.logIndex}`;
@@ -212,7 +212,7 @@ indexer.onEvent({ contract: "TwapContract", event: "OrderCreated" }, async ({ ev
   }
 });
 
-indexer.onEvent({ contract: "TwapContract", event: "OrderCompleted" }, async ({ event, context }) => {
+TwapContract.OrderCompleted.handler(async ({ event, context }) => {
   const chainPrefix = `${event.chainId}-`;
   const orderId = event.params.id.toString();
 
@@ -228,7 +228,7 @@ indexer.onEvent({ contract: "TwapContract", event: "OrderCompleted" }, async ({ 
   }
 });
 
-indexer.onEvent({ contract: "TwapContract", event: "OrderCanceled" }, async ({ event, context }) => {
+TwapContract.OrderCanceled.handler(async ({ event, context }) => {
   const chainPrefix = `${event.chainId}-`;
   const orderId = event.params.id.toString();
 

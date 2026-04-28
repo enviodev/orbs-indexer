@@ -1,10 +1,10 @@
-import { indexer } from "generated";
+import { Delegations } from "generated";
 
 // =============================================================================
 // SIMPLE EVENT HANDLERS
 // =============================================================================
 
-indexer.onEvent({ contract: "Delegations", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
+Delegations.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -14,7 +14,7 @@ indexer.onEvent({ contract: "Delegations", event: "ContractRegistryAddressUpdate
   });
 });
 
-indexer.onEvent({ contract: "Delegations", event: "DelegationInitialized" }, async ({ event, context }) => {
+Delegations.DelegationInitialized.handler(async ({ event, context }) => {
   context.DelegationInitialized.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     from: event.params.sender,
@@ -25,7 +25,7 @@ indexer.onEvent({ contract: "Delegations", event: "DelegationInitialized" }, asy
   });
 });
 
-indexer.onEvent({ contract: "Delegations", event: "InitializationComplete" }, async ({ event, context }) => {
+Delegations.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -34,7 +34,7 @@ indexer.onEvent({ contract: "Delegations", event: "InitializationComplete" }, as
   });
 });
 
-indexer.onEvent({ contract: "Delegations", event: "Locked" }, async ({ event, context }) => {
+Delegations.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -43,7 +43,7 @@ indexer.onEvent({ contract: "Delegations", event: "Locked" }, async ({ event, co
   });
 });
 
-indexer.onEvent({ contract: "Delegations", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
+Delegations.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -54,7 +54,7 @@ indexer.onEvent({ contract: "Delegations", event: "RegistryManagementTransferred
   });
 });
 
-indexer.onEvent({ contract: "Delegations", event: "Unlocked" }, async ({ event, context }) => {
+Delegations.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -67,7 +67,7 @@ indexer.onEvent({ contract: "Delegations", event: "Unlocked" }, async ({ event, 
 // COMPLEX HANDLERS
 // =============================================================================
 
-indexer.onEvent({ contract: "Delegations", event: "Delegated" }, async ({ event, context }) => {
+Delegations.Delegated.handler(async ({ event, context }) => {
   // 1. Create immutable Delegated entity
   context.Delegated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
@@ -117,7 +117,7 @@ indexer.onEvent({ contract: "Delegations", event: "Delegated" }, async ({ event,
   }
 });
 
-indexer.onEvent({ contract: "Delegations", event: "DelegatedStakeChanged" }, async ({ event, context }) => {
+Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
   // 1. Create immutable DelegatedStakeChanged entity
   const entityId = `${event.chainId}_${event.transaction.hash}_${event.logIndex}`;
   context.DelegatedStakeChanged.set({

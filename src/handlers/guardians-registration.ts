@@ -1,6 +1,6 @@
-import { indexer } from "generated";
+import { GuardiansRegistration } from "generated";
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
+GuardiansRegistration.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -10,7 +10,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "ContractRegistryAdd
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianDataUpdated" }, async ({ event, context }) => {
+GuardiansRegistration.GuardianDataUpdated.handler(async ({ event, context }) => {
   context.GuardianDataUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -26,7 +26,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianDataUpdated
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianMetadataChanged" }, async ({ event, context }) => {
+GuardiansRegistration.GuardianMetadataChanged.handler(async ({ event, context }) => {
   context.GuardianMetadataChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -39,7 +39,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianMetadataCha
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianRegistered" }, async ({ event, context }) => {
+GuardiansRegistration.GuardianRegistered.handler(async ({ event, context }) => {
   context.GuardianRegistered.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -49,7 +49,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianRegistered"
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianUnregistered" }, async ({ event, context }) => {
+GuardiansRegistration.GuardianUnregistered.handler(async ({ event, context }) => {
   context.GuardianUnregistered.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     guardian: event.params.guardian,
@@ -59,7 +59,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "GuardianUnregistere
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "InitializationComplete" }, async ({ event, context }) => {
+GuardiansRegistration.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -68,7 +68,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "InitializationCompl
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "Locked" }, async ({ event, context }) => {
+GuardiansRegistration.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -77,7 +77,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "Locked" }, async ({
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
+GuardiansRegistration.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -88,7 +88,7 @@ indexer.onEvent({ contract: "GuardiansRegistration", event: "RegistryManagementT
   });
 });
 
-indexer.onEvent({ contract: "GuardiansRegistration", event: "Unlocked" }, async ({ event, context }) => {
+GuardiansRegistration.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),

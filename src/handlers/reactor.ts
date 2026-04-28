@@ -1,11 +1,11 @@
-import { indexer, BigDecimal } from "generated";
+import { Reactor, BigDecimal } from "generated";
 import { CHAIN_CONFIG, SWAP_TOTAL_ID } from "../constants/chain-config";
 import { formatTimestamp } from "../utils/helpers";
 import { getTokenSymbol } from "../effects/tokenMetadata";
 import { getTransferLogs, parseTransferLogs } from "../effects/transactionReceipt";
 import { fetchTokenUsdValue } from "../utils/pricing";
 
-indexer.onEvent({ contract: "Reactor", event: "Fill" }, async ({ event, context }) => {
+Reactor.Fill.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const id = `${chainId}_${event.transaction.hash}_${event.logIndex}`;

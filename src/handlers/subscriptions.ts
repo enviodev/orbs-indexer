@@ -1,6 +1,6 @@
-import { indexer } from "generated";
+import { OrbsSubscriptions } from "generated";
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "ContractRegistryAddressUpdated" }, async ({ event, context }) => {
+OrbsSubscriptions.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     addr: event.params.addr,
@@ -10,7 +10,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "ContractRegistryAddress
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "GenesisRefTimeDelayChanged" }, async ({ event, context }) => {
+OrbsSubscriptions.GenesisRefTimeDelayChanged.handler(async ({ event, context }) => {
   context.GenesisRefTimeDelayChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newGenesisRefTimeDelay: event.params.newGenesisRefTimeDelay,
@@ -20,7 +20,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "GenesisRefTimeDelayChan
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "InitializationComplete" }, async ({ event, context }) => {
+OrbsSubscriptions.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -29,7 +29,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "InitializationComplete"
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "Locked" }, async ({ event, context }) => {
+OrbsSubscriptions.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -38,7 +38,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "Locked" }, async ({ eve
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "MinimumInitialVcPaymentChanged" }, async ({ event, context }) => {
+OrbsSubscriptions.MinimumInitialVcPaymentChanged.handler(async ({ event, context }) => {
   context.MinimumInitialVcPaymentChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newMinimumInitialVcPayment: event.params.newMinimumInitialVcPayment,
@@ -48,7 +48,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "MinimumInitialVcPayment
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "Payment" }, async ({ event, context }) => {
+OrbsSubscriptions.Payment.handler(async ({ event, context }) => {
   context.Payment.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     vcId: event.params.vcId,
@@ -62,7 +62,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "Payment" }, async ({ ev
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "RegistryManagementTransferred" }, async ({ event, context }) => {
+OrbsSubscriptions.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
@@ -73,7 +73,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "RegistryManagementTrans
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriberAdded" }, async ({ event, context }) => {
+OrbsSubscriptions.SubscriberAdded.handler(async ({ event, context }) => {
   context.SubscriberAdded.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     subscriber: event.params.subscriber,
@@ -83,7 +83,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriberAdded" }, asy
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriberRemoved" }, async ({ event, context }) => {
+OrbsSubscriptions.SubscriberRemoved.handler(async ({ event, context }) => {
   context.SubscriberRemoved.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     subscriber: event.params.subscriber,
@@ -93,7 +93,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriberRemoved" }, a
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriptionChanged" }, async ({ event, context }) => {
+OrbsSubscriptions.SubscriptionChanged.handler(async ({ event, context }) => {
   context.SubscriptionChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     vcId: event.params.vcId,
@@ -111,7 +111,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "SubscriptionChanged" },
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "Unlocked" }, async ({ event, context }) => {
+OrbsSubscriptions.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     blockNumber: BigInt(event.block.number),
@@ -120,7 +120,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "Unlocked" }, async ({ e
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "VcConfigRecordChanged" }, async ({ event, context }) => {
+OrbsSubscriptions.VcConfigRecordChanged.handler(async ({ event, context }) => {
   context.VcConfigRecordChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     vcId: event.params.vcId,
@@ -132,7 +132,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "VcConfigRecordChanged" 
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "VcCreated" }, async ({ event, context }) => {
+OrbsSubscriptions.VcCreated.handler(async ({ event, context }) => {
   context.VcCreated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     vcId: event.params.vcId,
@@ -142,7 +142,7 @@ indexer.onEvent({ contract: "OrbsSubscriptions", event: "VcCreated" }, async ({ 
   });
 });
 
-indexer.onEvent({ contract: "OrbsSubscriptions", event: "VcOwnerChanged" }, async ({ event, context }) => {
+OrbsSubscriptions.VcOwnerChanged.handler(async ({ event, context }) => {
   context.VcOwnerChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     vcId: event.params.vcId,

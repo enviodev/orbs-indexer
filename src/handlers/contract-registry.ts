@@ -1,6 +1,6 @@
-import { indexer } from "generated";
+import { OrbsContractRegistry } from "generated";
 
-indexer.onEvent({ contract: "OrbsContractRegistry", event: "ContractAddressUpdated" }, async ({ event, context }) => {
+OrbsContractRegistry.ContractAddressUpdated.handler(async ({ event, context }) => {
   context.ContractAddressUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     contractName: event.params.contractName,
@@ -12,7 +12,7 @@ indexer.onEvent({ contract: "OrbsContractRegistry", event: "ContractAddressUpdat
   });
 });
 
-indexer.onEvent({ contract: "OrbsContractRegistry", event: "ContractRegistryUpdated" }, async ({ event, context }) => {
+OrbsContractRegistry.ContractRegistryUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryUpdated.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     newContractRegistry: event.params.newContractRegistry,
@@ -22,7 +22,7 @@ indexer.onEvent({ contract: "OrbsContractRegistry", event: "ContractRegistryUpda
   });
 });
 
-indexer.onEvent({ contract: "OrbsContractRegistry", event: "ManagerChanged" }, async ({ event, context }) => {
+OrbsContractRegistry.ManagerChanged.handler(async ({ event, context }) => {
   context.ManagerChanged.set({
     id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
     role: event.params.role,
