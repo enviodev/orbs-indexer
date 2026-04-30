@@ -318,12 +318,12 @@ describe("Cross-chain", () => {
     const allInit = await indexer.InitializationComplete.getAll();
     for (const entity of allInit) {
       // All IDs should start with chainId_
-      t.expect(entity.id).toMatch(/^\d+_0x/);
+      t.expect(entity.id).toMatch(/^\d+_\d+_\d+$/);
     }
 
     const allLocked = await indexer.Locked.getAll();
     for (const entity of allLocked) {
-      t.expect(entity.id).toMatch(/^\d+_0x/);
+      t.expect(entity.id).toMatch(/^\d+_\d+_\d+$/);
     }
   }, 30_000);
 });

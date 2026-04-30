@@ -2,7 +2,8 @@ import { OrbsSubscriptions } from "generated";
 
 OrbsSubscriptions.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     addr: event.params.addr,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -12,7 +13,8 @@ OrbsSubscriptions.ContractRegistryAddressUpdated.handler(async ({ event, context
 
 OrbsSubscriptions.GenesisRefTimeDelayChanged.handler(async ({ event, context }) => {
   context.GenesisRefTimeDelayChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     newGenesisRefTimeDelay: event.params.newGenesisRefTimeDelay,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -22,7 +24,8 @@ OrbsSubscriptions.GenesisRefTimeDelayChanged.handler(async ({ event, context }) 
 
 OrbsSubscriptions.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -31,7 +34,8 @@ OrbsSubscriptions.InitializationComplete.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -40,7 +44,8 @@ OrbsSubscriptions.Locked.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.MinimumInitialVcPaymentChanged.handler(async ({ event, context }) => {
   context.MinimumInitialVcPaymentChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     newMinimumInitialVcPayment: event.params.newMinimumInitialVcPayment,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -50,7 +55,8 @@ OrbsSubscriptions.MinimumInitialVcPaymentChanged.handler(async ({ event, context
 
 OrbsSubscriptions.Payment.handler(async ({ event, context }) => {
   context.Payment.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     vcId: event.params.vcId,
     by: event.params.by,
     amount: event.params.amount,
@@ -64,7 +70,8 @@ OrbsSubscriptions.Payment.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
     newRegistryAdmin: event.params.newRegistryAdmin,
     blockNumber: BigInt(event.block.number),
@@ -75,7 +82,8 @@ OrbsSubscriptions.RegistryManagementTransferred.handler(async ({ event, context 
 
 OrbsSubscriptions.SubscriberAdded.handler(async ({ event, context }) => {
   context.SubscriberAdded.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     subscriber: event.params.subscriber,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -85,7 +93,8 @@ OrbsSubscriptions.SubscriberAdded.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.SubscriberRemoved.handler(async ({ event, context }) => {
   context.SubscriberRemoved.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     subscriber: event.params.subscriber,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -95,7 +104,8 @@ OrbsSubscriptions.SubscriberRemoved.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.SubscriptionChanged.handler(async ({ event, context }) => {
   context.SubscriptionChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     vcId: event.params.vcId,
     owner: event.params.owner,
     name: event.params.name,
@@ -113,7 +123,8 @@ OrbsSubscriptions.SubscriptionChanged.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -122,7 +133,8 @@ OrbsSubscriptions.Unlocked.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.VcConfigRecordChanged.handler(async ({ event, context }) => {
   context.VcConfigRecordChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     vcId: event.params.vcId,
     key: event.params.key,
     value: event.params.value,
@@ -134,7 +146,8 @@ OrbsSubscriptions.VcConfigRecordChanged.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.VcCreated.handler(async ({ event, context }) => {
   context.VcCreated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     vcId: event.params.vcId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -144,7 +157,8 @@ OrbsSubscriptions.VcCreated.handler(async ({ event, context }) => {
 
 OrbsSubscriptions.VcOwnerChanged.handler(async ({ event, context }) => {
   context.VcOwnerChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     vcId: event.params.vcId,
     previousOwner: event.params.previousOwner,
     newOwner: event.params.newOwner,

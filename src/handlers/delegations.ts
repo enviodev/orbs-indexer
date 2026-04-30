@@ -6,7 +6,8 @@ import { Delegations } from "generated";
 
 Delegations.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     addr: event.params.addr,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -16,7 +17,8 @@ Delegations.ContractRegistryAddressUpdated.handler(async ({ event, context }) =>
 
 Delegations.DelegationInitialized.handler(async ({ event, context }) => {
   context.DelegationInitialized.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     from: event.params.sender,
     to: event.params.recipient,
     blockNumber: BigInt(event.block.number),
@@ -27,7 +29,8 @@ Delegations.DelegationInitialized.handler(async ({ event, context }) => {
 
 Delegations.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -36,7 +39,8 @@ Delegations.InitializationComplete.handler(async ({ event, context }) => {
 
 Delegations.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -45,7 +49,8 @@ Delegations.Locked.handler(async ({ event, context }) => {
 
 Delegations.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
     newRegistryAdmin: event.params.newRegistryAdmin,
     blockNumber: BigInt(event.block.number),
@@ -56,7 +61,8 @@ Delegations.RegistryManagementTransferred.handler(async ({ event, context }) => 
 
 Delegations.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -70,7 +76,8 @@ Delegations.Unlocked.handler(async ({ event, context }) => {
 Delegations.Delegated.handler(async ({ event, context }) => {
   // 1. Create immutable Delegated entity
   context.Delegated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     from: event.params.sender,
     to: event.params.recipient,
     blockNumber: BigInt(event.block.number),
@@ -98,6 +105,7 @@ Delegations.Delegated.handler(async ({ event, context }) => {
   // 3. Update delegator -> guardian mapping
   context.DelegatorToGuardian.set({
     id: chainPrefix + from,
+    chainId: event.chainId,
     guardian: to,
   });
 
@@ -106,6 +114,7 @@ Delegations.Delegated.handler(async ({ event, context }) => {
   if (!guardian) {
     context.GuardianToDelegators.set({
       id: chainPrefix + to,
+      chainId: event.chainId,
       delegators: [from],
     });
   } else {
@@ -119,9 +128,10 @@ Delegations.Delegated.handler(async ({ event, context }) => {
 
 Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
   // 1. Create immutable DelegatedStakeChanged entity
-  const entityId = `${event.chainId}_${event.transaction.hash}_${event.logIndex}`;
+  const entityId = `${event.chainId}_${event.block.number}_${event.logIndex}`;
   context.DelegatedStakeChanged.set({
     id: entityId,
+    chainId: event.chainId,
     addr: event.params.addr,
     selfDelegatedStake: event.params.selfDelegatedStake,
     delegatedStake: event.params.delegatedStake,
@@ -141,6 +151,7 @@ Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
   if (!guardianInfo) {
     guardianInfo = {
       id: chainPrefix + guardianAddr,
+      chainId: event.chainId,
       nDelegates: 0n,
       delegatorMap_id: undefined,
     };
@@ -165,6 +176,7 @@ Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
     if (!d) {
       d = {
         id: dmId,
+        chainId: event.chainId,
         lastChangeBlock: BigInt(event.block.number),
         lastChangeTime: BigInt(event.block.timestamp),
         address: delegatorAddr,
@@ -184,6 +196,7 @@ Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
     // Save DelegatorMap
     context.DelegatorMap.set({
       id: dmId,
+      chainId: event.chainId,
       delegator_id: dmId,
     });
   }

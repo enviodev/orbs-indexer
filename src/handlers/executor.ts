@@ -13,7 +13,7 @@ async function calcMetrics(context: any, chainId: number, dollarValue: BigDecima
   const dayKey = chainPrefix + day;
   let daily = await context.SwapDaily.get(dayKey);
   if (!daily) {
-    context.SwapDaily.set({ id: dayKey, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1 });
+    context.SwapDaily.set({ id: dayKey, chainId, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1 });
   } else {
     context.SwapDaily.set({
       ...daily,
@@ -24,7 +24,7 @@ async function calcMetrics(context: any, chainId: number, dollarValue: BigDecima
   const totalKey = chainPrefix + SWAP_TOTAL_ID;
   let total = await context.SwapTotal.get(totalKey);
   if (!total) {
-    context.SwapTotal.set({ id: totalKey, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
+    context.SwapTotal.set({ id: totalKey, chainId, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
   } else {
     context.SwapTotal.set({
       ...total,
@@ -39,7 +39,7 @@ async function saveLhOutputToken(context: any, chainId: number, dstTokenAddress:
   const outputId = chainPrefix + "LhOutputTokens";
   let outputTokens = await context.LhOutputTokens.get(outputId);
   if (!outputTokens) {
-    context.LhOutputTokens.set({ id: outputId, tokenAddresses: [dstTokenAddress] });
+    context.LhOutputTokens.set({ id: outputId, chainId, tokenAddresses: [dstTokenAddress] });
   } else if (!outputTokens.tokenAddresses.includes(dstTokenAddress)) {
     context.LhOutputTokens.set({ ...outputTokens, tokenAddresses: [...outputTokens.tokenAddresses, dstTokenAddress] });
   }
@@ -52,7 +52,8 @@ ExecutorV5.Resolved.handler(async ({ event, context }) => {
   const txId = chainPrefix + event.transaction.hash;
 
   context.Resolved.set({
-    id: `${chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${chainId}_${event.block.number}_${event.logIndex}`,
+    chainId,
     orderHash: event.params.orderHash,
     swapper: event.params.swapper,
     ref: event.params.ref,
@@ -101,6 +102,7 @@ ExecutorV5.Resolved.handler(async ({ event, context }) => {
 
   context.Swap.set({
     id: txId,
+    chainId,
     txHash: event.transaction.hash,
     timestamp,
     userAddress: event.params.swapper.toLowerCase(),
@@ -127,7 +129,8 @@ ExecutorV5.Surplus.handler(async ({ event, context }) => {
   const txId = chainPrefix + event.transaction.hash;
 
   context.Surplus.set({
-    id: `${chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${chainId}_${event.block.number}_${event.logIndex}`,
+    chainId,
     swapper: event.params.swapper,
     ref: event.params.ref,
     token: event.params.token,
@@ -150,7 +153,7 @@ ExecutorV5.Surplus.handler(async ({ event, context }) => {
     context.Swap.set({ ...swap, dexAmountOut, fees: event.params.refshare.toString(), dollarValue });
   } else {
     context.Swap.set({
-      id: txId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
+      id: txId, chainId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
       txHash: event.transaction.hash, dexAmountOut: userSurplus.toString(), fees: event.params.refshare.toString(),
       srcTokenSymbol: undefined, srcTokenAddress: undefined, srcAmount: undefined,
       dstTokenSymbol: undefined, dstTokenAddress: undefined, gasFees: undefined,
@@ -165,7 +168,8 @@ ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
   const txId = chainPrefix + event.transaction.hash;
 
   context.Resolved.set({
-    id: `${chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${chainId}_${event.block.number}_${event.logIndex}`,
+    chainId,
     orderHash: event.params.orderHash,
     swapper: event.params.swapper,
     ref: event.params.ref,
@@ -199,7 +203,7 @@ ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
   );
 
   context.Swap.set({
-    id: txId, txHash: event.transaction.hash, timestamp,
+    id: txId, chainId, txHash: event.transaction.hash, timestamp,
     userAddress: event.params.swapper.toLowerCase(),
     executorAddress: event.srcAddress.toLowerCase(),
     srcTokenAddress: event.params.inToken.toLowerCase(), srcTokenSymbol,
@@ -219,7 +223,8 @@ ExecutorV6.SurplusV6.handler(async ({ event, context }) => {
   const txId = chainPrefix + event.transaction.hash;
 
   context.Surplus.set({
-    id: `${chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${chainId}_${event.block.number}_${event.logIndex}`,
+    chainId,
     swapper: event.params.swapper,
     ref: event.params.ref,
     token: event.params.token,
@@ -242,7 +247,7 @@ ExecutorV6.SurplusV6.handler(async ({ event, context }) => {
     context.Swap.set({ ...swap, dexAmountOut, fees: event.params.refshare.toString(), dollarValue });
   } else {
     context.Swap.set({
-      id: txId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
+      id: txId, chainId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
       txHash: event.transaction.hash, dexAmountOut: userSurplus.toString(), fees: event.params.refshare.toString(),
       srcTokenSymbol: undefined, srcTokenAddress: undefined, srcAmount: undefined,
       dstTokenSymbol: undefined, dstTokenAddress: undefined, gasFees: undefined,
@@ -257,7 +262,8 @@ ExecutorV6.ExtraOut.handler(async ({ event, context }) => {
   const txId = chainPrefix + event.transaction.hash;
 
   context.ExtraOut.set({
-    id: `${chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${chainId}_${event.block.number}_${event.logIndex}`,
+    chainId,
     recipient: event.params.recipient,
     token: event.params.token,
     amount: event.params.amount,
@@ -269,7 +275,7 @@ ExecutorV6.ExtraOut.handler(async ({ event, context }) => {
   let swap = await context.Swap.get(txId);
   if (!swap) {
     context.Swap.set({
-      id: txId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
+      id: txId, chainId, userAddress: "", dollarValue: new BigDecimal(0), executorAddress: "", timestamp: "",
       txHash: event.transaction.hash, gasFees: event.params.amount.toString(),
       srcTokenSymbol: undefined, srcTokenAddress: undefined, srcAmount: undefined,
       dstTokenSymbol: undefined, dstTokenAddress: undefined, dexAmountOut: undefined, fees: undefined,

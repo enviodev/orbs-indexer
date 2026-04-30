@@ -10,7 +10,7 @@ import { fetchUSDValue } from "../utils/pricing";
 TwapContract.OrderFilled.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
-  const entityId = `${chainId}_${event.transaction.hash}_${event.logIndex}`;
+  const entityId = `${chainId}_${event.block.number}_${event.logIndex}`;
   const twapAddress = event.srcAddress;
   const dex = getDexByRouter(event.params.exchange);
   const timestamp = formatTimestamp(event.block.timestamp);
@@ -63,6 +63,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
 
   context.OrderFilled.set({
     id: entityId,
+    chainId,
     TWAP_id: Number(event.params.id),
     twapAddress,
     userAddress: event.params.maker,
@@ -93,7 +94,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
   let daily = await context.FilledDaily.get(key);
   if (!daily) {
     context.FilledDaily.set({
-      id: key, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1, dex, exchange: event.params.exchange,
+      id: key, chainId, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1, dex, exchange: event.params.exchange,
     });
   } else {
     context.FilledDaily.set({
@@ -105,7 +106,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
   const totalKey = chainPrefix + dex;
   let total = await context.FilledTotal.get(totalKey);
   if (!total) {
-    context.FilledTotal.set({ id: totalKey, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
+    context.FilledTotal.set({ id: totalKey, chainId, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
   } else {
     context.FilledTotal.set({
       ...total, cumulativeTotalCalculatedValue: total.cumulativeTotalCalculatedValue.plus(dollarValue), totalCount: (total.totalCount || 0) + 1,
@@ -117,7 +118,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
     const outputId = chainPrefix + "TwapOutputTokens";
     let outputTokens = await context.TwapOutputTokens.get(outputId);
     if (!outputTokens) {
-      context.TwapOutputTokens.set({ id: outputId, tokenAddresses: [dstTokenAddress] });
+      context.TwapOutputTokens.set({ id: outputId, chainId, tokenAddresses: [dstTokenAddress] });
     } else if (!outputTokens.tokenAddresses.includes(dstTokenAddress)) {
       context.TwapOutputTokens.set({ ...outputTokens, tokenAddresses: [...outputTokens.tokenAddresses, dstTokenAddress] });
     }
@@ -127,7 +128,7 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
 TwapContract.OrderCreated.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
-  const entityId = `${chainId}_${event.transaction.hash}_${event.logIndex}`;
+  const entityId = `${chainId}_${event.block.number}_${event.logIndex}`;
   const twapAddress = event.srcAddress;
   const timestamp = formatTimestamp(event.block.timestamp);
   const dex = getDexByRouter(event.params.exchange);
@@ -149,6 +150,7 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
 
   context.OrderCreated.set({
     id: entityId,
+    chainId,
     Contract_id: event.params.id,
     twapAddress,
     maker: event.params.maker,
@@ -176,9 +178,10 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
 
   // Status entities
   const orderId = event.params.id.toString();
-  context.Status.set({ id: chainPrefix + orderId, status: undefined });
+  context.Status.set({ id: chainPrefix + orderId, chainId, status: undefined });
   context.StatusNew.set({
     id: chainPrefix + `${twapAddress}_${orderId}`,
+    chainId,
     twapId: orderId,
     twapAddress,
     status: undefined,
@@ -189,7 +192,7 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
   const key = chainPrefix + `${dex}_${day}`;
   let daily = await context.CreatedDaily.get(key);
   if (!daily) {
-    context.CreatedDaily.set({ id: key, date: day, dailyCount: 1, dex, exchange: event.params.exchange });
+    context.CreatedDaily.set({ id: key, chainId, date: day, dailyCount: 1, dex, exchange: event.params.exchange });
   } else {
     context.CreatedDaily.set({ ...daily, dailyCount: (daily.dailyCount || 0) + 1 });
   }
@@ -197,7 +200,7 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
   const totalKey = chainPrefix + dex;
   let total = await context.CreatedTotal.get(totalKey);
   if (!total) {
-    context.CreatedTotal.set({ id: totalKey, totalCount: 1 });
+    context.CreatedTotal.set({ id: totalKey, chainId, totalCount: 1 });
   } else {
     context.CreatedTotal.set({ ...total, totalCount: (total.totalCount || 0) + 1 });
   }
@@ -206,7 +209,7 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
   const userAddress = event.params.maker.toLowerCase();
   let dau = await context.DailyActiveUsers.get(key);
   if (!dau) {
-    context.DailyActiveUsers.set({ id: key, count: 1, userAddresses: [userAddress] });
+    context.DailyActiveUsers.set({ id: key, chainId, count: 1, userAddresses: [userAddress] });
   } else if (!dau.userAddresses.includes(userAddress)) {
     context.DailyActiveUsers.set({ ...dau, count: dau.count + 1, userAddresses: [...dau.userAddresses, userAddress] });
   }
