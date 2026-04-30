@@ -2,7 +2,8 @@ import { GuardiansRegistration } from "generated";
 
 GuardiansRegistration.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     addr: event.params.addr,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -12,7 +13,8 @@ GuardiansRegistration.ContractRegistryAddressUpdated.handler(async ({ event, con
 
 GuardiansRegistration.GuardianDataUpdated.handler(async ({ event, context }) => {
   context.GuardianDataUpdated.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     guardian: event.params.guardian,
     isRegistered: event.params.isRegistered,
     ip: event.params.ip,
@@ -28,7 +30,8 @@ GuardiansRegistration.GuardianDataUpdated.handler(async ({ event, context }) => 
 
 GuardiansRegistration.GuardianMetadataChanged.handler(async ({ event, context }) => {
   context.GuardianMetadataChanged.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     guardian: event.params.guardian,
     key: event.params.key,
     newValue: event.params.newValue,
@@ -41,7 +44,8 @@ GuardiansRegistration.GuardianMetadataChanged.handler(async ({ event, context })
 
 GuardiansRegistration.GuardianRegistered.handler(async ({ event, context }) => {
   context.GuardianRegistered.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     guardian: event.params.guardian,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -51,7 +55,8 @@ GuardiansRegistration.GuardianRegistered.handler(async ({ event, context }) => {
 
 GuardiansRegistration.GuardianUnregistered.handler(async ({ event, context }) => {
   context.GuardianUnregistered.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     guardian: event.params.guardian,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -61,7 +66,8 @@ GuardiansRegistration.GuardianUnregistered.handler(async ({ event, context }) =>
 
 GuardiansRegistration.InitializationComplete.handler(async ({ event, context }) => {
   context.InitializationComplete.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -70,7 +76,8 @@ GuardiansRegistration.InitializationComplete.handler(async ({ event, context }) 
 
 GuardiansRegistration.Locked.handler(async ({ event, context }) => {
   context.Locked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -79,7 +86,8 @@ GuardiansRegistration.Locked.handler(async ({ event, context }) => {
 
 GuardiansRegistration.RegistryManagementTransferred.handler(async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
     newRegistryAdmin: event.params.newRegistryAdmin,
     blockNumber: BigInt(event.block.number),
@@ -90,7 +98,8 @@ GuardiansRegistration.RegistryManagementTransferred.handler(async ({ event, cont
 
 GuardiansRegistration.Unlocked.handler(async ({ event, context }) => {
   context.Unlocked.set({
-    id: `${event.chainId}_${event.transaction.hash}_${event.logIndex}`,
+    id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
+    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,

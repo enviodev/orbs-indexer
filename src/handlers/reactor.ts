@@ -8,11 +8,12 @@ import { fetchTokenUsdValue } from "../utils/pricing";
 Reactor.Fill.handler(async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
-  const id = `${chainId}_${event.transaction.hash}_${event.logIndex}`;
+  const id = `${chainId}_${event.block.number}_${event.logIndex}`;
   const txId = chainPrefix + event.transaction.hash;
 
   context.Fill.set({
     id,
+    chainId,
     orderHash: event.params.orderHash,
     filler: event.params.filler,
     swapper: event.params.swapper,
@@ -42,6 +43,7 @@ Reactor.Fill.handler(async ({ event, context }) => {
   // Create initial Swap stub — Resolved/Surplus/ExtraOut handlers will fill in the details
   context.Swap.set({
     id: txId,
+    chainId,
     userAddress,
     dollarValue,
     executorAddress,
@@ -62,7 +64,7 @@ Reactor.Fill.handler(async ({ event, context }) => {
   const dayKey = chainPrefix + day;
   let daily = await context.SwapDaily.get(dayKey);
   if (!daily) {
-    context.SwapDaily.set({ id: dayKey, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1 });
+    context.SwapDaily.set({ id: dayKey, chainId, date: day, dailyTotalCalculatedValue: dollarValue, dailyCount: 1 });
   } else {
     context.SwapDaily.set({
       ...daily,
@@ -74,7 +76,7 @@ Reactor.Fill.handler(async ({ event, context }) => {
   const totalKey = chainPrefix + SWAP_TOTAL_ID;
   let total = await context.SwapTotal.get(totalKey);
   if (!total) {
-    context.SwapTotal.set({ id: totalKey, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
+    context.SwapTotal.set({ id: totalKey, chainId, cumulativeTotalCalculatedValue: dollarValue, totalCount: 1 });
   } else {
     context.SwapTotal.set({
       ...total,
