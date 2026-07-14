@@ -1,6 +1,8 @@
-import { GuardiansRegistration } from "generated";
+import { indexer } from "envio";
 
-GuardiansRegistration.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "ContractRegistryAddressUpdated" },
+  async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -9,9 +11,12 @@ GuardiansRegistration.ContractRegistryAddressUpdated.handler(async ({ event, con
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.GuardianDataUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "GuardianDataUpdated" },
+  async ({ event, context }) => {
   context.GuardianDataUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -26,9 +31,12 @@ GuardiansRegistration.GuardianDataUpdated.handler(async ({ event, context }) => 
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.GuardianMetadataChanged.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "GuardianMetadataChanged" },
+  async ({ event, context }) => {
   context.GuardianMetadataChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -40,9 +48,12 @@ GuardiansRegistration.GuardianMetadataChanged.handler(async ({ event, context })
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.GuardianRegistered.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "GuardianRegistered" },
+  async ({ event, context }) => {
   context.GuardianRegistered.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -51,9 +62,12 @@ GuardiansRegistration.GuardianRegistered.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.GuardianUnregistered.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "GuardianUnregistered" },
+  async ({ event, context }) => {
   context.GuardianUnregistered.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -62,9 +76,12 @@ GuardiansRegistration.GuardianUnregistered.handler(async ({ event, context }) =>
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "InitializationComplete" },
+  async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -72,9 +89,12 @@ GuardiansRegistration.InitializationComplete.handler(async ({ event, context }) 
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.Locked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "Locked" },
+  async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -82,9 +102,12 @@ GuardiansRegistration.Locked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "RegistryManagementTransferred" },
+  async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -94,9 +117,12 @@ GuardiansRegistration.RegistryManagementTransferred.handler(async ({ event, cont
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-GuardiansRegistration.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "GuardiansRegistration", event: "Unlocked" },
+  async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -104,4 +130,5 @@ GuardiansRegistration.Unlocked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);

@@ -1,6 +1,8 @@
-import { Protocol } from "generated";
+import { indexer } from "envio";
 
-Protocol.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "ContractRegistryAddressUpdated" },
+  async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -9,9 +11,12 @@ Protocol.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Protocol.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "InitializationComplete" },
+  async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -19,9 +24,12 @@ Protocol.InitializationComplete.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Protocol.Locked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "Locked" },
+  async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -29,9 +37,12 @@ Protocol.Locked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Protocol.ProtocolVersionChanged.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "ProtocolVersionChanged" },
+  async ({ event, context }) => {
   context.ProtocolVersionChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -43,9 +54,12 @@ Protocol.ProtocolVersionChanged.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Protocol.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "RegistryManagementTransferred" },
+  async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -55,9 +69,12 @@ Protocol.RegistryManagementTransferred.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Protocol.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Protocol", event: "Unlocked" },
+  async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -65,4 +82,5 @@ Protocol.Unlocked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);

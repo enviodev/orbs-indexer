@@ -1,6 +1,8 @@
-import { Certification } from "generated";
+import { indexer } from "envio";
 
-Certification.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "ContractRegistryAddressUpdated" },
+  async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -9,9 +11,12 @@ Certification.ContractRegistryAddressUpdated.handler(async ({ event, context }) 
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Certification.GuardianCertificationUpdate.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "GuardianCertificationUpdate" },
+  async ({ event, context }) => {
   context.GuardianCertificationUpdate.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -21,9 +26,12 @@ Certification.GuardianCertificationUpdate.handler(async ({ event, context }) => 
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Certification.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "InitializationComplete" },
+  async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -31,9 +39,12 @@ Certification.InitializationComplete.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Certification.Locked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "Locked" },
+  async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -41,9 +52,12 @@ Certification.Locked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Certification.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "RegistryManagementTransferred" },
+  async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -53,9 +67,12 @@ Certification.RegistryManagementTransferred.handler(async ({ event, context }) =
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Certification.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Certification", event: "Unlocked" },
+  async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -63,4 +80,5 @@ Certification.Unlocked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);

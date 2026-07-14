@@ -1,5 +1,5 @@
 import { describe, it } from "vitest";
-import { createTestIndexer } from "generated";
+import { createTestIndexer } from "envio";
 
 // ============================================================================
 // Committee Subgraph Tests (Ethereum mainnet, chain 1)

@@ -1,4 +1,4 @@
-import { BigDecimal } from "generated";
+import { BigDecimal } from "envio";
 import { getChainlinkPrice, getChainlinkOracleDecimals } from "../effects/oraclePrice";
 import { getPythPrice } from "../effects/pythPrice";
 import { getV2PoolReserves } from "../effects/v2Pool";

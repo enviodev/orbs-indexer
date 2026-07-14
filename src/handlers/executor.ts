@@ -1,4 +1,4 @@
-import { ExecutorV5, ExecutorV6, BigDecimal } from "generated";
+import { indexer, BigDecimal } from "envio";
 import { CHAIN_CONFIG, SWAP_TOTAL_ID } from "../constants/chain-config";
 import { formatTimestamp } from "../utils/helpers";
 import { getTokenSymbol } from "../effects/tokenMetadata";
@@ -46,7 +46,9 @@ async function saveLhOutputToken(context: any, chainId: number, dstTokenAddress:
 }
 
 // === ExecutorV5 Resolved ===
-ExecutorV5.Resolved.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ExecutorV5", event: "Resolved" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -120,10 +122,13 @@ ExecutorV5.Resolved.handler(async ({ event, context }) => {
 
   await calcMetrics(context, chainId, dollarValue, timestamp);
   await saveLhOutputToken(context, chainId, dstTokenAddress);
-});
+}
+);
 
 // === ExecutorV5 Surplus ===
-ExecutorV5.Surplus.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ExecutorV5", event: "Surplus" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -159,10 +164,13 @@ ExecutorV5.Surplus.handler(async ({ event, context }) => {
       dstTokenSymbol: undefined, dstTokenAddress: undefined, gasFees: undefined,
     });
   }
-});
+}
+);
 
 // === ExecutorV6 ResolvedV6 ===
-ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ExecutorV6", event: "ResolvedV6" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -214,10 +222,13 @@ ExecutorV6.ResolvedV6.handler(async ({ event, context }) => {
 
   await calcMetrics(context, chainId, dollarValue, timestamp);
   await saveLhOutputToken(context, chainId, dstTokenAddress);
-});
+}
+);
 
 // === ExecutorV6 SurplusV6 ===
-ExecutorV6.SurplusV6.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ExecutorV6", event: "SurplusV6" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -253,10 +264,13 @@ ExecutorV6.SurplusV6.handler(async ({ event, context }) => {
       dstTokenSymbol: undefined, dstTokenAddress: undefined, gasFees: undefined,
     });
   }
-});
+}
+);
 
 // === ExecutorV6 ExtraOut ===
-ExecutorV6.ExtraOut.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "ExecutorV6", event: "ExtraOut" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const txId = chainPrefix + event.transaction.hash;
@@ -283,4 +297,5 @@ ExecutorV6.ExtraOut.handler(async ({ event, context }) => {
   } else {
     context.Swap.set({ ...swap, gasFees: event.params.amount.toString() });
   }
-});
+}
+);

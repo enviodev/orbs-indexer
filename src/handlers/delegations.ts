@@ -1,10 +1,12 @@
-import { Delegations } from "generated";
+import { indexer } from "envio";
 
 // =============================================================================
 // SIMPLE EVENT HANDLERS
 // =============================================================================
 
-Delegations.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "ContractRegistryAddressUpdated" },
+  async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -13,9 +15,12 @@ Delegations.ContractRegistryAddressUpdated.handler(async ({ event, context }) =>
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Delegations.DelegationInitialized.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "DelegationInitialized" },
+  async ({ event, context }) => {
   context.DelegationInitialized.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -25,9 +30,12 @@ Delegations.DelegationInitialized.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Delegations.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "InitializationComplete" },
+  async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -35,9 +43,12 @@ Delegations.InitializationComplete.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Delegations.Locked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "Locked" },
+  async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -45,9 +56,12 @@ Delegations.Locked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Delegations.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "RegistryManagementTransferred" },
+  async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -57,9 +71,12 @@ Delegations.RegistryManagementTransferred.handler(async ({ event, context }) => 
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Delegations.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "Unlocked" },
+  async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -67,13 +84,16 @@ Delegations.Unlocked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
 // =============================================================================
 // COMPLEX HANDLERS
 // =============================================================================
 
-Delegations.Delegated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "Delegated" },
+  async ({ event, context }) => {
   // 1. Create immutable Delegated entity
   context.Delegated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
@@ -124,9 +144,12 @@ Delegations.Delegated.handler(async ({ event, context }) => {
     }
     context.GuardianToDelegators.set({ ...guardian, delegators });
   }
-});
+}
+);
 
-Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Delegations", event: "DelegatedStakeChanged" },
+  async ({ event, context }) => {
   // 1. Create immutable DelegatedStakeChanged entity
   const entityId = `${event.chainId}_${event.block.number}_${event.logIndex}`;
   context.DelegatedStakeChanged.set({
@@ -203,4 +226,5 @@ Delegations.DelegatedStakeChanged.handler(async ({ event, context }) => {
 
   // 4. Save GuardianInfo
   context.GuardianInfo.set(guardianInfo);
-});
+}
+);

@@ -1,4 +1,4 @@
-import { TwapContract, BigDecimal } from "generated";
+import { indexer, BigDecimal } from "envio";
 import { getDexByRouter } from "../constants/dex-routers";
 import { CHAIN_CONFIG } from "../constants/chain-config";
 import { formatTimestamp } from "../utils/helpers";
@@ -7,7 +7,9 @@ import { getTwapOrder, parseTwapOrder } from "../effects/twapOrder";
 import { getTransferLogs, parseTransferLogs } from "../effects/transactionReceipt";
 import { fetchUSDValue } from "../utils/pricing";
 
-TwapContract.OrderFilled.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "TwapContract", event: "OrderFilled" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const entityId = `${chainId}_${event.block.number}_${event.logIndex}`;
@@ -123,9 +125,12 @@ TwapContract.OrderFilled.handler(async ({ event, context }) => {
       context.TwapOutputTokens.set({ ...outputTokens, tokenAddresses: [...outputTokens.tokenAddresses, dstTokenAddress] });
     }
   }
-});
+}
+);
 
-TwapContract.OrderCreated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "TwapContract", event: "OrderCreated" },
+  async ({ event, context }) => {
   const chainId = event.chainId;
   const chainPrefix = `${chainId}-`;
   const entityId = `${chainId}_${event.block.number}_${event.logIndex}`;
@@ -213,9 +218,12 @@ TwapContract.OrderCreated.handler(async ({ event, context }) => {
   } else if (!dau.userAddresses.includes(userAddress)) {
     context.DailyActiveUsers.set({ ...dau, count: dau.count + 1, userAddresses: [...dau.userAddresses, userAddress] });
   }
-});
+}
+);
 
-TwapContract.OrderCompleted.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "TwapContract", event: "OrderCompleted" },
+  async ({ event, context }) => {
   const chainPrefix = `${event.chainId}-`;
   const orderId = event.params.id.toString();
 
@@ -229,9 +237,12 @@ TwapContract.OrderCompleted.handler(async ({ event, context }) => {
   if (entityNew) {
     context.StatusNew.set({ ...entityNew, status: "COMPLETED" });
   }
-});
+}
+);
 
-TwapContract.OrderCanceled.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "TwapContract", event: "OrderCanceled" },
+  async ({ event, context }) => {
   const chainPrefix = `${event.chainId}-`;
   const orderId = event.params.id.toString();
 
@@ -245,4 +256,5 @@ TwapContract.OrderCanceled.handler(async ({ event, context }) => {
   if (entityNew) {
     context.StatusNew.set({ ...entityNew, status: "CANCELED" });
   }
-});
+}
+);

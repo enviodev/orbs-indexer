@@ -1,6 +1,8 @@
-import { Committee } from "generated";
+import { indexer } from "envio";
 
-Committee.CommitteeChange.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "CommitteeChange" },
+  async ({ event, context }) => {
   context.CommitteeChange.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -12,9 +14,12 @@ Committee.CommitteeChange.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "ContractRegistryAddressUpdated" },
+  async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -23,9 +28,12 @@ Committee.ContractRegistryAddressUpdated.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.InitializationComplete.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "InitializationComplete" },
+  async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -33,9 +41,12 @@ Committee.InitializationComplete.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.Locked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "Locked" },
+  async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -43,9 +54,12 @@ Committee.Locked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.MaxCommitteeSizeChanged.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "MaxCommitteeSizeChanged" },
+  async ({ event, context }) => {
   context.MaxCommitteeSizeChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -55,9 +69,12 @@ Committee.MaxCommitteeSizeChanged.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.RegistryManagementTransferred.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "RegistryManagementTransferred" },
+  async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -67,9 +84,12 @@ Committee.RegistryManagementTransferred.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
 
-Committee.Unlocked.handler(async ({ event, context }) => {
+indexer.onEvent(
+  { contract: "Committee", event: "Unlocked" },
+  async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
     chainId: event.chainId,
@@ -77,4 +97,5 @@ Committee.Unlocked.handler(async ({ event, context }) => {
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
   });
-});
+}
+);
