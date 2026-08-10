@@ -19,7 +19,7 @@ function isPythFeedId(oracleId: string): boolean {
 // Mirrors the original subgraph getV2Price(): returns
 //   (reserve0 / 10^token0Decimals) / (reserve1 / 10^token1Decimals)
 // i.e. "real units of token0 per real unit of token1".
-async function getV2Price(context: any, chainId: number, pool: string, blockNumber?: number): Promise<BigDecimal | null> {
+async function getV2Price(context: any, pool: string, blockNumber?: number): Promise<BigDecimal | null> {
   const result = await context.effect(getV2PoolReserves, `${chainId}:${pool}:${blockNumber || ""}`);
   if (!result) return null;
   const [token0, token1, r0Str, r1Str] = result.split("|");
@@ -51,7 +51,6 @@ async function getV2Price(context: any, chainId: number, pool: string, blockNumb
 //                            poolPrice = real_target/real_base, per-raw-target = basePerRaw / pool.
 async function fetchSpecialTokenUSDValue(
   context: any,
-  chainId: number,
   special: SpecialTokenConfig,
   blockNumber?: number
 ): Promise<BigDecimal> {
@@ -86,7 +85,6 @@ async function fetchSpecialTokenUSDValue(
 
 export async function fetchUSDValue(
   context: any,
-  chainId: number,
   assetName: string,
   assetAddress: string,
   blockNumber?: number
@@ -134,7 +132,6 @@ export async function fetchUSDValue(
 
 export async function fetchTokenUsdValue(
   context: any,
-  chainId: number,
   srcTokenSymbol: string | null | undefined,
   srcTokenAddress: string | null | undefined,
   srcAmount: string | null | undefined,

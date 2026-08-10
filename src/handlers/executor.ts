@@ -7,7 +7,7 @@ import { fetchTokenUsdValue } from "../utils/pricing";
 
 const ADDRESS_ZERO = "0x0000000000000000000000000000000000000000";
 
-async function calcMetrics(context: any, chainId: number, dollarValue: BigDecimal, timestamp: string) {
+async function calcMetrics(context: any, dollarValue: BigDecimal, timestamp: string) {
   const chainPrefix = `${chainId}-`;
   const day = timestamp.slice(0, 10);
   const dayKey = chainPrefix + day;
@@ -34,7 +34,7 @@ async function calcMetrics(context: any, chainId: number, dollarValue: BigDecima
   }
 }
 
-async function saveLhOutputToken(context: any, chainId: number, dstTokenAddress: string) {
+async function saveLhOutputToken(context: any, dstTokenAddress: string) {
   const chainPrefix = `${chainId}-`;
   const outputId = chainPrefix + "LhOutputTokens";
   let outputTokens = await context.LhOutputTokens.get(outputId);

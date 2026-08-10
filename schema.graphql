@@ -4,7 +4,6 @@
 
 type ContractRegistryAddressUpdated {
   id: ID!
-  chainId: Int! @index
   addr: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -13,7 +12,6 @@ type ContractRegistryAddressUpdated {
 
 type InitializationComplete {
   id: ID!
-  chainId: Int! @index
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: String!
@@ -21,7 +19,6 @@ type InitializationComplete {
 
 type Locked {
   id: ID!
-  chainId: Int! @index
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: String!
@@ -29,7 +26,6 @@ type Locked {
 
 type RegistryManagementTransferred {
   id: ID!
-  chainId: Int! @index
   previousRegistryAdmin: String!
   newRegistryAdmin: String!
   blockNumber: BigInt!
@@ -39,7 +35,6 @@ type RegistryManagementTransferred {
 
 type Unlocked {
   id: ID!
-  chainId: Int! @index
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   transactionHash: String!
@@ -51,7 +46,6 @@ type Unlocked {
 
 type Delegated {
   id: ID!
-  chainId: Int! @index
   from: String!
   to: String!
   blockNumber: BigInt!
@@ -61,7 +55,6 @@ type Delegated {
 
 type DelegatedStakeChanged {
   id: ID!
-  chainId: Int! @index
   addr: String!
   selfDelegatedStake: BigInt!
   delegatedStake: BigInt!
@@ -74,7 +67,6 @@ type DelegatedStakeChanged {
 
 type DelegationInitialized {
   id: ID!
-  chainId: Int! @index
   from: String!
   to: String!
   blockNumber: BigInt!
@@ -84,7 +76,6 @@ type DelegationInitialized {
 
 type Delegator {
   id: ID!
-  chainId: Int! @index
   lastChangeBlock: BigInt!
   lastChangeTime: BigInt!
   address: String!
@@ -94,13 +85,11 @@ type Delegator {
 
 type DelegatorMap {
   id: ID!
-  chainId: Int! @index
   delegator: Delegator!
 }
 
 type DelegateActions {
   id: ID!
-  chainId: Int! @index
   lastChangeBlock: BigInt!
   lastChangeTime: BigInt!
   address: String!
@@ -110,7 +99,6 @@ type DelegateActions {
 
 type DelegationStakes {
   id: ID!
-  chainId: Int! @index
   blockNumber: BigInt!
   blockTimestamp: BigInt!
   selfStake: BigInt!
@@ -121,20 +109,17 @@ type DelegationStakes {
 
 type GuardianInfo {
   id: ID!
-  chainId: Int! @index
   delegatorMap: DelegatorMap
   nDelegates: BigInt!
 }
 
 type GuardianToDelegators {
   id: ID!
-  chainId: Int! @index
   delegators: [String!]!
 }
 
 type DelegatorToGuardian {
   id: ID!
-  chainId: Int! @index
   guardian: String!
 }
 
@@ -144,7 +129,6 @@ type DelegatorToGuardian {
 
 type CommitteeChange {
   id: ID!
-  chainId: Int! @index
   addr: String!
   weight: BigInt!
   certification: Boolean!
@@ -156,7 +140,6 @@ type CommitteeChange {
 
 type MaxCommitteeSizeChanged {
   id: ID!
-  chainId: Int! @index
   newValue: Int!
   oldValue: Int!
   blockNumber: BigInt!
@@ -170,7 +153,6 @@ type MaxCommitteeSizeChanged {
 
 type ContractAddressUpdated {
   id: ID!
-  chainId: Int! @index
   contractName: String!
   addr: String!
   managedContract: Boolean!
@@ -181,7 +163,6 @@ type ContractAddressUpdated {
 
 type ContractRegistryUpdated {
   id: ID!
-  chainId: Int! @index
   newContractRegistry: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -190,7 +171,6 @@ type ContractRegistryUpdated {
 
 type ManagerChanged {
   id: ID!
-  chainId: Int! @index
   role: String!
   newManager: String!
   blockNumber: BigInt!
@@ -204,7 +184,6 @@ type ManagerChanged {
 
 type GuardianStatusUpdated {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   readyToSync: Boolean!
   readyForCommittee: Boolean!
@@ -215,7 +194,6 @@ type GuardianStatusUpdated {
 
 type GuardianVotedOut {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -224,7 +202,6 @@ type GuardianVotedOut {
 
 type GuardianVotedUnready {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -233,7 +210,6 @@ type GuardianVotedUnready {
 
 type MinSelfStakePercentMilleChanged {
   id: ID!
-  chainId: Int! @index
   newValue: BigInt!
   oldValue: BigInt!
   blockNumber: BigInt!
@@ -243,7 +219,6 @@ type MinSelfStakePercentMilleChanged {
 
 type StakeChanged {
   id: ID!
-  chainId: Int! @index
   addr: String!
   selfDelegatedStake: BigInt!
   delegatedStake: BigInt!
@@ -255,7 +230,6 @@ type StakeChanged {
 
 type VoteOutCasted {
   id: ID!
-  chainId: Int! @index
   voter: String!
   subject: String!
   blockNumber: BigInt!
@@ -265,7 +239,6 @@ type VoteOutCasted {
 
 type VoteOutPercentMilleThresholdChanged {
   id: ID!
-  chainId: Int! @index
   newValue: BigInt!
   oldValue: BigInt!
   blockNumber: BigInt!
@@ -275,7 +248,6 @@ type VoteOutPercentMilleThresholdChanged {
 
 type VoteUnreadyCasted {
   id: ID!
-  chainId: Int! @index
   voter: String!
   subject: String!
   expiration: BigInt!
@@ -286,7 +258,6 @@ type VoteUnreadyCasted {
 
 type VoteUnreadyPercentMilleThresholdChanged {
   id: ID!
-  chainId: Int! @index
   newValue: BigInt!
   oldValue: BigInt!
   blockNumber: BigInt!
@@ -296,7 +267,6 @@ type VoteUnreadyPercentMilleThresholdChanged {
 
 type VoteUnreadyTimeoutSecondsChanged {
   id: ID!
-  chainId: Int! @index
   newValue: BigInt!
   oldValue: BigInt!
   blockNumber: BigInt!
@@ -310,7 +280,6 @@ type VoteUnreadyTimeoutSecondsChanged {
 
 type GenesisRefTimeDelayChanged {
   id: ID!
-  chainId: Int! @index
   newGenesisRefTimeDelay: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -319,7 +288,6 @@ type GenesisRefTimeDelayChanged {
 
 type MinimumInitialVcPaymentChanged {
   id: ID!
-  chainId: Int! @index
   newMinimumInitialVcPayment: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -328,7 +296,6 @@ type MinimumInitialVcPaymentChanged {
 
 type Payment {
   id: ID!
-  chainId: Int! @index
   vcId: BigInt!
   by: String!
   amount: BigInt!
@@ -341,7 +308,6 @@ type Payment {
 
 type SubscriberAdded {
   id: ID!
-  chainId: Int! @index
   subscriber: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -350,7 +316,6 @@ type SubscriberAdded {
 
 type SubscriberRemoved {
   id: ID!
-  chainId: Int! @index
   subscriber: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -359,7 +324,6 @@ type SubscriberRemoved {
 
 type SubscriptionChanged {
   id: ID!
-  chainId: Int! @index
   vcId: BigInt!
   owner: String!
   name: String!
@@ -376,7 +340,6 @@ type SubscriptionChanged {
 
 type VcConfigRecordChanged {
   id: ID!
-  chainId: Int! @index
   vcId: BigInt!
   key: String!
   value: String!
@@ -387,7 +350,6 @@ type VcConfigRecordChanged {
 
 type VcCreated {
   id: ID!
-  chainId: Int! @index
   vcId: BigInt!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -396,7 +358,6 @@ type VcCreated {
 
 type VcOwnerChanged {
   id: ID!
-  chainId: Int! @index
   vcId: BigInt!
   previousOwner: String!
   newOwner: String!
@@ -411,7 +372,6 @@ type VcOwnerChanged {
 
 type ProtocolVersionChanged {
   id: ID!
-  chainId: Int! @index
   deploymentSubset: String!
   currentVersion: BigInt!
   nextVersion: BigInt!
@@ -427,7 +387,6 @@ type ProtocolVersionChanged {
 
 type GuardianDataUpdated {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   isRegistered: Boolean!
   ip: String!
@@ -442,7 +401,6 @@ type GuardianDataUpdated {
 
 type GuardianMetadataChanged {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   key: String!
   newValue: String!
@@ -454,7 +412,6 @@ type GuardianMetadataChanged {
 
 type GuardianRegistered {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -463,7 +420,6 @@ type GuardianRegistered {
 
 type GuardianUnregistered {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   blockNumber: BigInt!
   blockTimestamp: BigInt!
@@ -476,7 +432,6 @@ type GuardianUnregistered {
 
 type GuardianCertificationUpdate {
   id: ID!
-  chainId: Int! @index
   guardian: String!
   isCertified: Boolean!
   blockNumber: BigInt!
@@ -490,7 +445,6 @@ type GuardianCertificationUpdate {
 
 type OrderFilled {
   id: ID!
-  chainId: Int! @index
   TWAP_id: Int
   twapAddress: String!
   userAddress: String!
@@ -517,7 +471,6 @@ type OrderFilled {
 
 type FilledDaily {
   id: ID!
-  chainId: Int! @index
   date: String!
   dailyTotalCalculatedValue: BigDecimal!
   dailyCount: Int
@@ -527,21 +480,18 @@ type FilledDaily {
 
 type FilledTotal {
   id: ID!
-  chainId: Int! @index
   cumulativeTotalCalculatedValue: BigDecimal!
   totalCount: Int
 }
 
 type DailyActiveUsers {
   id: ID!
-  chainId: Int! @index
   userAddresses: [String!]!
   count: Int!
 }
 
 type OrderCreated {
   id: ID!
-  chainId: Int! @index
   Contract_id: BigInt!
   twapAddress: String!
   maker: String!
@@ -569,7 +519,6 @@ type OrderCreated {
 
 type CreatedDaily {
   id: ID!
-  chainId: Int! @index
   date: String!
   dailyCount: Int
   dex: String!
@@ -578,19 +527,16 @@ type CreatedDaily {
 
 type CreatedTotal {
   id: ID!
-  chainId: Int! @index
   totalCount: Int
 }
 
 type Status {
   id: ID!
-  chainId: Int! @index
   status: String
 }
 
 type StatusNew {
   id: ID!
-  chainId: Int! @index
   twapId: String!
   twapAddress: String!
   status: String
@@ -598,7 +544,6 @@ type StatusNew {
 
 type TwapOutputTokens {
   id: ID!
-  chainId: Int! @index
   tokenAddresses: [String!]!
 }
 
@@ -608,7 +553,6 @@ type TwapOutputTokens {
 
 type Fill {
   id: ID!
-  chainId: Int! @index
   orderHash: String!
   filler: String!
   swapper: String!
@@ -620,7 +564,6 @@ type Fill {
 
 type Swap {
   id: ID!
-  chainId: Int! @index
   userAddress: String!
   srcTokenSymbol: String
   srcTokenAddress: String
@@ -638,7 +581,6 @@ type Swap {
 
 type SwapDaily {
   id: ID!
-  chainId: Int! @index
   date: String!
   dailyTotalCalculatedValue: BigDecimal!
   dailyCount: Int
@@ -646,14 +588,12 @@ type SwapDaily {
 
 type SwapTotal {
   id: ID!
-  chainId: Int! @index
   cumulativeTotalCalculatedValue: BigDecimal!
   totalCount: Int
 }
 
 type Resolved {
   id: ID!
-  chainId: Int! @index
   orderHash: String!
   swapper: String!
   ref: String!
@@ -668,7 +608,6 @@ type Resolved {
 
 type Surplus {
   id: ID!
-  chainId: Int! @index
   swapper: String!
   ref: String!
   token: String!
@@ -681,7 +620,6 @@ type Surplus {
 
 type ExtraOut {
   id: ID!
-  chainId: Int! @index
   recipient: String!
   token: String!
   amount: BigInt!
@@ -692,6 +630,5 @@ type ExtraOut {
 
 type LhOutputTokens {
   id: ID!
-  chainId: Int! @index
   tokenAddresses: [String!]!
 }

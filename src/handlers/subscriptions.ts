@@ -5,7 +5,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.ContractRegistryAddressUpdated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     addr: event.params.addr,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -19,7 +18,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.GenesisRefTimeDelayChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     newGenesisRefTimeDelay: event.params.newGenesisRefTimeDelay,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -33,7 +31,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.InitializationComplete.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -46,7 +43,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.Locked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -59,7 +55,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.MinimumInitialVcPaymentChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     newMinimumInitialVcPayment: event.params.newMinimumInitialVcPayment,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -73,7 +68,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.Payment.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     vcId: event.params.vcId,
     by: event.params.by,
     amount: event.params.amount,
@@ -91,7 +85,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.RegistryManagementTransferred.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     previousRegistryAdmin: event.params.previousRegistryAdmin,
     newRegistryAdmin: event.params.newRegistryAdmin,
     blockNumber: BigInt(event.block.number),
@@ -106,7 +99,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.SubscriberAdded.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     subscriber: event.params.subscriber,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -120,7 +112,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.SubscriberRemoved.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     subscriber: event.params.subscriber,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -134,7 +125,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.SubscriptionChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     vcId: event.params.vcId,
     owner: event.params.owner,
     name: event.params.name,
@@ -156,7 +146,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.Unlocked.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
     transactionHash: event.transaction.hash,
@@ -169,7 +158,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.VcConfigRecordChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     vcId: event.params.vcId,
     key: event.params.key,
     value: event.params.value,
@@ -185,7 +173,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.VcCreated.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     vcId: event.params.vcId,
     blockNumber: BigInt(event.block.number),
     blockTimestamp: BigInt(event.block.timestamp),
@@ -199,7 +186,6 @@ indexer.onEvent(
   async ({ event, context }) => {
   context.VcOwnerChanged.set({
     id: `${event.chainId}_${event.block.number}_${event.logIndex}`,
-    chainId: event.chainId,
     vcId: event.params.vcId,
     previousOwner: event.params.previousOwner,
     newOwner: event.params.newOwner,

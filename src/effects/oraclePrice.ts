@@ -19,7 +19,7 @@ function getClient(chainId: number) {
   return clientCache.get(chainId)!;
 }
 
-// Input: "chainId:oracleAddress" — cached by oracle, not block (decimals are immutable per feed).
+// Input: "not block (decimals are immutable per feed).
 export const getChainlinkOracleDecimals = createEffect(
   {
     name: "getChainlinkOracleDecimals",

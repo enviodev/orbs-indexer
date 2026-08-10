@@ -550,7 +550,7 @@ export const CHAIN_CONFIG: Record<number, ChainConfig> = {
   },
 };
 
-export function getOracleAddress(chainId: number, assetName: string): string | null {
+export function getOracleAddress(assetName: string): string | null {
   const config = CHAIN_CONFIG[chainId];
   if (!config) return null;
 
